@@ -15,29 +15,33 @@ final class SearchEngineGoogle extends BaseProvider
     public function scrap(string $title, string $artist): string
     {
         $response = $this->http->GET(sprintf("https://www.google.com/search?client=firefox-b-d&%s", http_build_query(["q" => sprintf("lyrics \"%s\" \"%s\"", $title, $artist)])));
-        if ($response->code == 200 && !empty($response->body)) {
-            libxml_use_internal_errors(true);
-            $doc = new \DomDocument();
-            if ($doc->loadHTML($response->body)) {
-                $xpath = new \DOMXPath($doc);
-                // lyric paragraphs are contained on a <div jsname="WbKHeb"> with <span> childs
-                $nodes = $xpath->query('//div[@jsname="WbKHeb"]//span');
-                if ($nodes != false) {
-                    if ($nodes->count() > 0) {
-                        $data = null;
-                        foreach ($nodes as $key => $node) {
-                            $data .= trim($node->textContent) . PHP_EOL;
-                        }
-                        if (!empty($data)) {
-                            return ($data);
+        if ($response->code == 200) {
+            if (!empty($response->body)) {
+                libxml_use_internal_errors(true);
+                $doc = new \DomDocument();
+                if ($doc->loadHTML($response->body)) {
+                    $xpath = new \DOMXPath($doc);
+                    // lyric paragraphs are contained on a <div jsname="WbKHeb"> with <span> childs
+                    $nodes = $xpath->query('//div[@jsname="WbKHeb"]//span');
+                    if ($nodes != false) {
+                        if ($nodes->count() > 0) {
+                            $data = null;
+                            foreach ($nodes as $key => $node) {
+                                $data .= trim($node->textContent) . PHP_EOL;
+                            }
+                            if (!empty($data)) {
+                                return ($data);
+                            } else {
+                                throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
+                            }
                         } else {
-                            throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
+                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@jsname="WbKHeb"]//span'));
                         }
                     } else {
                         throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@jsname="WbKHeb"]//span'));
                     }
                 } else {
-                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@jsname="WbKHeb"]//span'));
+                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTML body");
                 }
             } else {
                 throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
