@@ -1,5 +1,5 @@
 {
-    "name": "aportela/lastfm-wrapper",
+    "name": "aportela/scraper-lyrics",
     "description": "Search & scrap lyrics from various sources",
     "type": "library",
     "license": "AGPL-3.0-only",
