@@ -1,0 +1,39 @@
+{
+    "name": "aportela/lastfm-wrapper",
+    "description": "Search & scrap lyrics from various sources",
+    "type": "library",
+    "license": "AGPL-3.0-only",
+    "authors": [
+        {
+            "name": "alex",
+            "email": "766f6964+github@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/aportela/scraper-lyrics",
+    "autoload": {
+        "psr-4": {
+            "aportela\\ScraperLyrics\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "aportela\\ScraperLyrics\\Test\\": "Test"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": ">=8.1",
+        "aportela/httprequest-wrapper": "^2.0",
+        "psr/log": "^3.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.28",
+        "phpunit/phpunit": "^10.3"
+    },
+    "scripts": {
+        "fix" : "vendor/bin/php-cs-fixer fix src",
+        "test": "vendor/bin/phpunit"
+    }
+}
