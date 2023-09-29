@@ -66,7 +66,7 @@ if ($lyrics->scrap(
 if ($lyrics->scrapFromSourceProvider(
     "Bohemian Rhapsody",
     "Queen",
-    \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO,
+    \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO
 )) {
     echo sprintf(
         "<H1>Title: %s</h1><H2>Artist: %s</H2><H3>Source: %s</H3><PRE>%s</PRE>",
