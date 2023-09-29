@@ -1,6 +1,6 @@
 {
     "name": "aportela/scraper-lyrics",
-    "description": "Search & scrap lyrics from various sources",
+    "description": "Custom php lyrics scraper",
     "type": "library",
     "license": "AGPL-3.0-only",
     "authors": [
