@@ -14,7 +14,7 @@ final class SearchEngineGoogle extends BaseProvider
 
     public function scrap(string $title, string $artist): string
     {
-        $response = $this->http->GET(sprintf("https://www.google.com/search?client=firefox-b-d&%s", http_build_query(["q" => sprintf("lyrics \"%s\" \"%s\"", $title, $artist)])));
+        $response = $this->http->GET("https://www.google.com/search", ["q" => sprintf("lyrics \"%s\" \"%s\"", $title, $artist), "client" => "firefox-b-d"]);
         if ($response->code == 200) {
             if (!empty($response->body)) {
                 libxml_use_internal_errors(true);

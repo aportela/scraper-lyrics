@@ -6,12 +6,15 @@ final class SearchEngineBing extends BaseProvider
 {
     public function __construct(\Psr\Log\LoggerInterface $logger)
     {
-        parent::__construct($logger, null);
+        parent::__construct($logger, "");
     }
 
     public function scrap(string $title, string $artist): string
     {
-        $response = $this->http->GET(sprintf("https://www.bing.com/search?%s", http_build_query(["q" => sprintf("lyrics \"%s\" \"%s\"", $title, $artist)])));
+        // I suspect that sometimes BING fail scrap on first call (next are working)
+        // At this time, I don't know if it is due to some protection method of the server itself or if it is waiting for some type of previous redirection / cookie set
+        // I tried getting cookies with HEAD (Previous to GET), sending Referer header, faking User Agent to Edge, nothing works 100%
+        $response = $this->http->GET("https://www.bing.com/search", ["q" => sprintf("lyrics \"%s\" \"%s\"", $title, $artist)]);
         if ($response->code == 200) {
             if (!empty($response->body)) {
                 libxml_use_internal_errors(true);
