@@ -85,7 +85,7 @@ class Lyrics
                         return (true);
                     }
                 } catch (\Throwable $e) {
-                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on lyricsmania search engine: " . $e->getMessage());
+                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on lyricsmania: " . $e->getMessage());
                 }
                 break;
             case \aportela\ScraperLyrics\SourceProvider::GENIUS:
@@ -97,7 +97,19 @@ class Lyrics
                         return (true);
                     }
                 } catch (\Throwable $e) {
-                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on genius search engine: " . $e->getMessage());
+                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on genius: " . $e->getMessage());
+                }
+                break;
+            case \aportela\ScraperLyrics\SourceProvider::MUSIXMATCH:
+                $scraper = new \aportela\ScraperLyrics\SourceProviders\Musicmatch($this->logger);
+                try {
+                    $this->lyrics = $scraper->scrap($this->title, $this->artist);
+                    if (!empty($this->lyrics)) {
+                        $this->source = "musicmatch";
+                        return (true);
+                    }
+                } catch (\Throwable $e) {
+                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on musicmatch: " . $e->getMessage());
                 }
                 break;
             default:
@@ -116,6 +128,7 @@ class Lyrics
                     \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO,
                     \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_GOOGLE,
                     \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_BING,
+                    \aportela\ScraperLyrics\SourceProvider::MUSIXMATCH,
                     \aportela\ScraperLyrics\SourceProvider::LYRICS_MANIA,
                     \aportela\ScraperLyrics\SourceProvider::GENIUS,
                 ] as $provider) {
