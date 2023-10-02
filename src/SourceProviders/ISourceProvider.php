@@ -2,7 +2,7 @@
 
 namespace aportela\ScraperLyrics\SourceProviders;
 
-interface InterfaceSourceProvider
+interface ISourceProvider
 {
     public function scrap(string $title, string $artist): string;
 }

@@ -2,7 +2,7 @@
 
 namespace aportela\ScraperLyrics\SourceProviders;
 
-class BaseProvider implements InterfaceSourceProvider
+class BaseProvider implements ISourceProvider
 {
     protected \Psr\Log\LoggerInterface $logger;
     protected \aportela\HTTPRequestWrapper\HTTPRequest $http;
