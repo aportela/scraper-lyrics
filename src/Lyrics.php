@@ -39,82 +39,84 @@ class Lyrics
     public function scrapFromSourceProvider(string $title, string $artist, \aportela\ScraperLyrics\SourceProvider $sourceProvider): bool
     {
         $this->setCleanedFields($title, $artist);
-        switch ($sourceProvider) {
-            case \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_GOOGLE:
-                $scraper = new \aportela\ScraperLyrics\SourceProviders\SearchEngineGoogle($this->logger);
-                try {
-                    $this->lyrics = $scraper->scrap($this->title, $this->artist);
-                    if (!empty($this->lyrics)) {
-                        $this->source = "google";
-                        return (true);
+        if (!empty($this->title) && !empty($this->artist)) {
+            switch ($sourceProvider) {
+                case \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_GOOGLE:
+                    $scraper = new \aportela\ScraperLyrics\SourceProviders\SearchEngineGoogle($this->logger);
+                    try {
+                        $this->lyrics = $scraper->scrap($this->title, $this->artist);
+                        if (!empty($this->lyrics)) {
+                            $this->source = "google";
+                            return (true);
+                        }
+                    } catch (\Throwable $e) {
+                        $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on google search engine: " . $e->getMessage());
                     }
-                } catch (\Throwable $e) {
-                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on google search engine: " . $e->getMessage());
-                }
-                break;
-            case \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_BING:
-                $scraper = new \aportela\ScraperLyrics\SourceProviders\SearchEngineBing($this->logger);
-                try {
-                    $this->lyrics = $scraper->scrap($this->title, $this->artist);
-                    if (!empty($this->lyrics)) {
-                        $this->source = "bing";
-                        return (true);
+                    break;
+                case \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_BING:
+                    $scraper = new \aportela\ScraperLyrics\SourceProviders\SearchEngineBing($this->logger);
+                    try {
+                        $this->lyrics = $scraper->scrap($this->title, $this->artist);
+                        if (!empty($this->lyrics)) {
+                            $this->source = "bing";
+                            return (true);
+                        }
+                    } catch (\Throwable $e) {
+                        $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on bing search engine: " . $e->getMessage());
                     }
-                } catch (\Throwable $e) {
-                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on bing search engine: " . $e->getMessage());
-                }
-                break;
-            case \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO:
-                $scraper = new \aportela\ScraperLyrics\SourceProviders\SearchEngineDuckDuckGo($this->logger);
-                try {
-                    $this->lyrics = $scraper->scrap($this->title, $this->artist);
-                    if (!empty($this->lyrics)) {
-                        $this->source = "duckduckgo";
-                        return (true);
+                    break;
+                case \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO:
+                    $scraper = new \aportela\ScraperLyrics\SourceProviders\SearchEngineDuckDuckGo($this->logger);
+                    try {
+                        $this->lyrics = $scraper->scrap($this->title, $this->artist);
+                        if (!empty($this->lyrics)) {
+                            $this->source = "duckduckgo";
+                            return (true);
+                        }
+                    } catch (\Throwable $e) {
+                        $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on duckduckgo search engine: " . $e->getMessage());
                     }
-                } catch (\Throwable $e) {
-                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on duckduckgo search engine: " . $e->getMessage());
-                }
-                break;
-            case \aportela\ScraperLyrics\SourceProvider::LYRICS_MANIA:
-                $scraper = new \aportela\ScraperLyrics\SourceProviders\LyricsMania($this->logger);
-                try {
-                    $this->lyrics = $scraper->scrap($this->title, $this->artist);
-                    if (!empty($this->lyrics)) {
-                        $this->source = "lyricsmania";
-                        return (true);
+                    break;
+                case \aportela\ScraperLyrics\SourceProvider::LYRICS_MANIA:
+                    $scraper = new \aportela\ScraperLyrics\SourceProviders\LyricsMania($this->logger);
+                    try {
+                        $this->lyrics = $scraper->scrap($this->title, $this->artist);
+                        if (!empty($this->lyrics)) {
+                            $this->source = "lyricsmania";
+                            return (true);
+                        }
+                    } catch (\Throwable $e) {
+                        $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on lyricsmania: " . $e->getMessage());
                     }
-                } catch (\Throwable $e) {
-                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on lyricsmania: " . $e->getMessage());
-                }
-                break;
-            case \aportela\ScraperLyrics\SourceProvider::GENIUS:
-                $scraper = new \aportela\ScraperLyrics\SourceProviders\Genius($this->logger);
-                try {
-                    $this->lyrics = $scraper->scrap($this->title, $this->artist);
-                    if (!empty($this->lyrics)) {
-                        $this->source = "genius";
-                        return (true);
+                    break;
+                case \aportela\ScraperLyrics\SourceProvider::GENIUS:
+                    $scraper = new \aportela\ScraperLyrics\SourceProviders\Genius($this->logger);
+                    try {
+                        $this->lyrics = $scraper->scrap($this->title, $this->artist);
+                        if (!empty($this->lyrics)) {
+                            $this->source = "genius";
+                            return (true);
+                        }
+                    } catch (\Throwable $e) {
+                        $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on genius: " . $e->getMessage());
                     }
-                } catch (\Throwable $e) {
-                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on genius: " . $e->getMessage());
-                }
-                break;
-            case \aportela\ScraperLyrics\SourceProvider::MUSIXMATCH:
-                $scraper = new \aportela\ScraperLyrics\SourceProviders\Musicmatch($this->logger);
-                try {
-                    $this->lyrics = $scraper->scrap($this->title, $this->artist);
-                    if (!empty($this->lyrics)) {
-                        $this->source = "musicmatch";
-                        return (true);
+                    break;
+                case \aportela\ScraperLyrics\SourceProvider::MUSIXMATCH:
+                    $scraper = new \aportela\ScraperLyrics\SourceProviders\Musicmatch($this->logger);
+                    try {
+                        $this->lyrics = $scraper->scrap($this->title, $this->artist);
+                        if (!empty($this->lyrics)) {
+                            $this->source = "musicmatch";
+                            return (true);
+                        }
+                    } catch (\Throwable $e) {
+                        $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on musicmatch: " . $e->getMessage());
                     }
-                } catch (\Throwable $e) {
-                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on musicmatch: " . $e->getMessage());
-                }
-                break;
-            default:
-                return (false);
-                break;
+                    break;
+                default:
+                    return (false);
+                    break;
+            }
         }
         return (false);
     }
