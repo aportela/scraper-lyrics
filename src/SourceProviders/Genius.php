@@ -65,7 +65,7 @@ final class Genius extends BaseProvider
                 $doc = new \DomDocument();
                 if ($doc->loadHTML(str_ireplace(array("<br>", "<br/>", "<br />"), PHP_EOL, $response->body))) {
                     $xpath = new \DOMXPath($doc);
-                    // lyric are contained on multiple childs of <div data-lyrics-container>
+                    // lyric paragraphs are contained in a <div data-lyrics-container="true">
                     $nodes = $xpath->query('//div[@data-lyrics-container="true"]');
                     if ($nodes != false) {
                         if ($nodes->count() > 0) {
