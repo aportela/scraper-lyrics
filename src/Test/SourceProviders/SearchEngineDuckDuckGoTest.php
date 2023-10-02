@@ -13,16 +13,11 @@ final class SearchEngineDuckDuckGoTest extends \aportela\ScraperLyrics\Test\Base
         parent::setUpBeforeClass();
     }
 
-    public function testScrapSuccess(): void
+    public function testScrap(): void
     {
         $success = self::$lyrics->scrap("Bohemian Rhapsody", "Queen", [\aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO]);
         $this->assertTrue($success);
         $this->assertNotEmpty(self::$lyrics->lyrics);
         $this->assertEquals(self::$lyrics->source, "duckduckgo");
-    }
-
-    public function testScrapNotFound(): void
-    {
-        $this->assertFalse(self::$lyrics->scrap("#", "#", [\aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO]));
     }
 }

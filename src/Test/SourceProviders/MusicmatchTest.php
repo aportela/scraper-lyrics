@@ -13,7 +13,7 @@ final class MusicmatchTest extends \aportela\ScraperLyrics\Test\BaseTest
         parent::setUpBeforeClass();
     }
 
-    public function testScrapSuccess(): void
+    public function testScrap(): void
     {
         $success = self::$lyrics->scrap("Bohemian Rhapsody", "Queen", [\aportela\ScraperLyrics\SourceProvider::MUSIXMATCH]);
         $this->assertTrue($success);

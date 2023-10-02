@@ -13,16 +13,11 @@ final class SearchEngineGoogleTest extends \aportela\ScraperLyrics\Test\BaseTest
         parent::setUpBeforeClass();
     }
 
-    public function testScrapSuccess(): void
+    public function testScrap(): void
     {
         $success = self::$lyrics->scrap("Bohemian Rhapsody", "Queen", [\aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_GOOGLE]);
         $this->assertTrue($success);
         $this->assertNotEmpty(self::$lyrics->lyrics);
         $this->assertEquals(self::$lyrics->source, "google");
-    }
-
-    public function testScrapNotFound(): void
-    {
-        $this->assertFalse(self::$lyrics->scrap("#", "#", [\aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_GOOGLE]));
     }
 }

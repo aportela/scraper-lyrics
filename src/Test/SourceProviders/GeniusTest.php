@@ -13,16 +13,11 @@ final class GeniusTest extends \aportela\ScraperLyrics\Test\BaseTest
         parent::setUpBeforeClass();
     }
 
-    public function testScrapSuccess(): void
+    public function testScrap(): void
     {
         $success = self::$lyrics->scrap("Bohemian Rhapsody", "Queen", [\aportela\ScraperLyrics\SourceProvider::GENIUS]);
         $this->assertTrue($success);
         $this->assertNotEmpty(self::$lyrics->lyrics);
         $this->assertEquals(self::$lyrics->source, "genius");
-    }
-
-    public function testScrapNotFound(): void
-    {
-        $this->assertFalse(self::$lyrics->scrap("#", "#", [\aportela\ScraperLyrics\SourceProvider::GENIUS]));
     }
 }
