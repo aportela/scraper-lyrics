@@ -6,6 +6,7 @@
         <file>src/Test/SourceProviders/SearchEngineGoogleTest.php</file>
         <file>src/Test/SourceProviders/SearchEngineBingTest.php</file>
         <file>src/Test/SourceProviders/SearchEngineDuckDuckGoTest.php</file>
+        <file>src/Test/SourceProviders/LyricsManiaTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
