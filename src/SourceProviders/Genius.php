@@ -4,9 +4,10 @@ namespace aportela\ScraperLyrics\SourceProviders;
 
 final class Genius extends BaseProvider
 {
+    private const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/116.0.1938.81";
     public function __construct(\Psr\Log\LoggerInterface $logger)
     {
-        parent::__construct($logger, "");
+        parent::__construct($logger, self::USER_AGENT);
     }
 
     private function getLink(string $title, string $artist): string
@@ -51,6 +52,7 @@ final class Genius extends BaseProvider
 
     public function scrap(string $title, string $artist): string
     {
+        $this->http->setReferer("https://genius.com/search?" . http_build_query(["q" => sprintf("\"%s\" \"%s\"", $title, $artist)]));
         $response = $this->http->GET($this->getLink($title, $artist));
         if ($response->code == 200) {
             if (!empty($response->body)) {
