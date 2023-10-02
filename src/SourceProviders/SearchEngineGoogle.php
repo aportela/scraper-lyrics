@@ -4,17 +4,19 @@ namespace aportela\ScraperLyrics\SourceProviders;
 
 final class SearchEngineGoogle extends BaseProvider
 {
-    // WARNING: (AT THIS TIME) this is REQUIRED/IMPORTANT, with another user agents (on GOOGLE) the search response is not the same (do not include lyrics!)
-    private const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/116.0.1938.81";
-
     public function __construct(\Psr\Log\LoggerInterface $logger)
     {
-        parent::__construct($logger, self::USER_AGENT);
+        // fake user agent as a real browser
+        parent::__construct($logger, \aportela\HTTPRequestWrapper\UserAgent::CHROME_WINDOWS_10->value);
     }
 
     public function scrap(string $title, string $artist): string
     {
-        $response = $this->http->GET("https://www.google.com/search", ["q" => sprintf("lyrics \"%s\" \"%s\"", $title, $artist), "client" => "firefox-b-d"]);
+        // get cookies & set referer so that Google does not realize so easily that we are using a script and not a browser
+        // I can't guarantee it will always work, but the request will be less suspicious in a quick analysis
+        $response = $this->http->HEAD("https://www.google.com/");
+        $this->http->setReferer("https://www.google.com/");
+        $response = $this->http->GET("https://www.google.com/search", ["q" => sprintf("lyrics \"%s\" \"%s\"", $title, $artist)]);
         if ($response->code == 200) {
             if (!empty($response->body)) {
                 libxml_use_internal_errors(true);
