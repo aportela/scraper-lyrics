@@ -88,6 +88,18 @@ class Lyrics
                     $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on lyricsmania search engine: " . $e->getMessage());
                 }
                 break;
+            case \aportela\ScraperLyrics\SourceProvider::GENIUS:
+                $scraper = new \aportela\ScraperLyrics\SourceProviders\Genius($this->logger);
+                try {
+                    $this->lyrics = $scraper->scrap($this->title, $this->artist);
+                    if (!empty($this->lyrics)) {
+                        $this->source = "genius";
+                        return (true);
+                    }
+                } catch (\Throwable $e) {
+                    $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on genius search engine: " . $e->getMessage());
+                }
+                break;
             default:
                 return (false);
                 break;
@@ -105,6 +117,7 @@ class Lyrics
                     \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_GOOGLE,
                     \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_BING,
                     \aportela\ScraperLyrics\SourceProvider::LYRICS_MANIA,
+                    \aportela\ScraperLyrics\SourceProvider::GENIUS,
                 ] as $provider) {
             if ($this->scrapFromSourceProvider($title, $artist, $provider)) {
                 return (true);
