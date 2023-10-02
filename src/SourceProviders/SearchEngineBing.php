@@ -6,14 +6,16 @@ final class SearchEngineBing extends BaseProvider
 {
     public function __construct(\Psr\Log\LoggerInterface $logger)
     {
-        parent::__construct($logger, "");
+        // fake user agent as a real browser
+        parent::__construct($logger, \aportela\HTTPRequestWrapper\UserAgent::EDGE_WINDOWS_10->value);
     }
 
     public function scrap(string $title, string $artist): string
     {
-        // I suspect that sometimes BING fail scrap on first call (next are working)
-        // At this time, I don't know if it is due to some protection method of the server itself or if it is waiting for some type of previous redirection / cookie set
-        // I tried getting cookies with HEAD (Previous to GET), sending Referer header, faking User Agent to Edge, nothing works 100%
+        // get cookies & set referer so that Google does not realize so easily that we are using a script and not a browser
+        // I can't guarantee it will always work, but the request will be less suspicious in a quick analysis
+        $response = $this->http->HEAD("https://www.bing.com/");
+        $this->http->setReferer("https://ntp.msn.com/");
         $response = $this->http->GET("https://www.bing.com/search", ["q" => sprintf("lyrics \"%s\" \"%s\"", $title, $artist)]);
         if ($response->code == 200) {
             if (!empty($response->body)) {
@@ -35,10 +37,10 @@ final class SearchEngineBing extends BaseProvider
                                 throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
                             }
                         } else {
-                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@jsname="lyrics"]//div'));
+                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@class="lyrics"]//div'));
                         }
                     } else {
-                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@jsname="lyrics"]//div'));
+                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@class="lyrics"]//div'));
                     }
                 } else {
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTML body");
