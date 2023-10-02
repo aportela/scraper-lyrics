@@ -13,7 +13,6 @@ final class Musicmatch extends BaseProvider
     private function getLink(string $title, string $artist): string
     {
         $this->http->setReferer("https://www.musixmatch.com/");
-        echo sprintf("https://www.musixmatch.com/search/%s/tracks", urlencode($title . " " . $artist)) . PHP_EOL;
         $response = $this->http->GET(sprintf("https://www.musixmatch.com/search/%s/tracks", urlencode($title . " " . $artist)));
         if ($response->code == 200) {
             if (!empty($response->body)) {
@@ -49,7 +48,6 @@ final class Musicmatch extends BaseProvider
         // I can't guarantee it will always work, but the request will be less suspicious in a quick analysis
         $response = $this->http->HEAD("https://www.musixmatch.com/");
         $link = $this->getLink($title, $artist);
-        echo $link . PHP_EOL;
         $this->http->setReferer(sprintf("https://www.musixmatch.com/search/%s/tracks", urlencode($title . " " . $artist)));
         $response = $this->http->GET(sprintf("https://www.musixmatch.com%s/embed", $link));
         if ($response->code == 200) {
