@@ -8,6 +8,7 @@
         <file>src/Test/SourceProviders/SearchEngineDuckDuckGoTest.php</file>
         <file>src/Test/SourceProviders/LyricsManiaTest.php</file>
         <file>src/Test/SourceProviders/GeniusTest.php</file>
+        <file>src/Test/SourceProviders/MusicmatchTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
