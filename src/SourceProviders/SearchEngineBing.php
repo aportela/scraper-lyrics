@@ -30,9 +30,6 @@ final class SearchEngineBing extends BaseProvider
                                 $data .= trim($node->textContent) . PHP_EOL;
                             }
                             if (!empty($data)) {
-                                if ($artist == "#") {
-                                    die($data);
-                                }
                                 return ($data);
                             } else {
                                 throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
