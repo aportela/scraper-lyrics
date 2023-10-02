@@ -39,7 +39,7 @@ if ($lyrics->scrap(
 
 /**
     Search/Scrap on custom scrap providers
-    You can use this method if at some point in the future a provider stops working and you want to save/ignore the call to its method (which will give an error) in case you previously used the global method (scrap)
+    You can use this method if at some point in the future a provider stops working and you want to ignore scraping with him (which will give an error) in case you previously used the global (scrap) method
 */
 if ($lyrics->scrap(
     "Bohemian Rhapsody",
