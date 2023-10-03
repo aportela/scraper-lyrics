@@ -10,12 +10,17 @@ final class Genius extends BaseProvider
         parent::__construct($logger, \aportela\HTTPRequestWrapper\UserAgent::EDGE_WINDOWS_10->value);
     }
 
-    private function getLink(string $title, string $artist): string
+    private function getLink(string $title, string $artist, string $cloudFlareURL = ""): string
     {
         // required for _csrf_token COOKIE, we want recognized as a human on next requests
         $this->http->HEAD("https://genius.com/search/embed");
         $this->http->setReferer("https://genius.com/search/embed");
-        $response = $this->http->GET("https://genius.com/api/search/multi", ["per_page" => 1, "q" => sprintf("\"%s\" \"%s\"", $title, $artist)]);
+        $response = null;
+        if (empty($cloudFlareURL)) {
+            $response = $this->http->GET("https://genius.com/api/search/multi", ["per_page" => 1, "q" => sprintf("\"%s\" \"%s\"", $title, $artist)]);
+        } else {
+            $response = $this->http->GET($cloudFlareURL);
+        }
         if ($response->code == 200) {
             if (!empty($response->body)) {
                 if ($response->is(\aportela\HTTPRequestWrapper\ContentType::JSON)) {
@@ -52,7 +57,7 @@ final class Genius extends BaseProvider
             // cloudflare protection :-D
             $pattern = '/"visitor-time",fa: "([^"]+)"/';
             if (preg_match($pattern, $response->body, $matches) && count($matches) == 2) {
-                $url = "https://genius.com%s" . str_replace("\/", "/", $matches[1]);
+                $url = "https://genius.com" . str_replace("\/", "/", $matches[1]);
                 echo $url . PHP_EOL;
             }
             throw new \aportela\ScraperLyrics\Exception\HTTPException("Cloudflare protection error");
