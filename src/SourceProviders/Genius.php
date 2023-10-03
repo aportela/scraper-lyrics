@@ -53,7 +53,7 @@ final class Genius extends BaseProvider
 
     public function scrap(string $title, string $artist): string
     {
-        // get cookies & set referer so that Google does not realize so easily that we are using a script and not a browser
+        // get cookies & set referer so that Genius does not realize so easily that we are using a script and not a browser
         // I can't guarantee it will always work, but the request will be less suspicious in a quick analysis
         $response = $this->http->HEAD("https://genius.com/");
         $link = $this->getLink($title, $artist);
