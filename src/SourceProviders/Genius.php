@@ -50,11 +50,10 @@ final class Genius extends BaseProvider
             }
         } else if ($response->code == 403) {
             // cloudflare protection :-D
-            $pattern = '/"visitor-time",fa: "(\/api\/search\/multi?^"+)"/';
-            if (preg_match($pattern, $response->body, $matches)) {
-                print_r($matches);
-            } else {
-                print_r($response->body);
+            $pattern = '/"visitor-time",fa: "([^"]+)"/';
+            if (preg_match($pattern, $response->body, $matches) && count($matches) == 2) {
+                $url = "https://genius.com%s" . str_replace("\/", "/", $matches[1]);
+                echo $url . PHP_EOL;
             }
             throw new \aportela\ScraperLyrics\Exception\HTTPException("Cloudflare protection error");
         } else {
@@ -64,6 +63,10 @@ final class Genius extends BaseProvider
 
     public function scrap(string $title, string $artist): string
     {
+        if (preg_match($pattern, $aa, $matches)) {
+            print_r($matches);
+        }
+        exit;
         // get cookies so that Genius does not realize so easily that we are using a script and not a browser
         // I can't guarantee it will always work, but the request will be less suspicious in a quick analysis
         $response = $this->http->HEAD("https://genius.com/");
