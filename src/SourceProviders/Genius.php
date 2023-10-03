@@ -53,6 +53,8 @@ final class Genius extends BaseProvider
             $pattern = '/"visitor-time",fa: "(\/api\/search\/multi?^"+)"/';
             if (preg_match($pattern, $response->body, $matches)) {
                 print_r($matches);
+            } else {
+                print_r($response->body);
             }
             throw new \aportela\ScraperLyrics\Exception\HTTPException("Cloudflare protection error");
         } else {
