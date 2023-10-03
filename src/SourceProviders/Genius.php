@@ -54,12 +54,18 @@ final class Genius extends BaseProvider
                 throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
             }
         } else if ($response->code == 403) {
-            // cloudflare protection :-D
-            $pattern = '/"visitor-time",fa: "([^"]+)"/';
-            if (preg_match($pattern, $response->body, $matches) && count($matches) == 2) {
-                return ($this->getLink($title, $artist, "https://genius.com" . str_replace("\/", "/", $matches[1])));
+            if (empty($cloudFlareURL)) {
+                // cloudflare protection :-D
+                $pattern = '/"visitor-time",fa: "([^"]+)"/';
+                if (preg_match($pattern, $response->body, $matches) && count($matches) == 2) {
+                    return ($this->getLink($title, $artist, "https://genius.com" . str_replace("\/", "/", $matches[1])));
+                } else {
+                    print_r($response->body);
+                    throw new \aportela\ScraperLyrics\Exception\HTTPException("Cloudflare (?) protection (403) error: redirect URL not found");
+                }
             } else {
-                throw new \aportela\ScraperLyrics\Exception\HTTPException("Cloudflare (?) protection (403) error: redirect URL not found");
+                print_r($response->body);
+                throw new \aportela\ScraperLyrics\Exception\HTTPException("Cloudflare (?) protection (403) error: infinite loop abortion");
             }
         } else {
             throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
