@@ -15,7 +15,7 @@ class Lyrics
     public ?string $lyrics;
     public ?string $source;
 
-    public function __construct(\Psr\Log\LoggerInterface $logger, string $title = "", string $artist = "")
+    public function __construct(\Psr\Log\LoggerInterface $logger)
     {
         $this->logger = $logger;
         $this->logger->debug("ScraperLyrics\Lyrics::__construct");
@@ -118,6 +118,18 @@ class Lyrics
                             $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on musicmatch: " . $e->getMessage());
                         }
                         break;
+                    case \aportela\ScraperLyrics\SourceProvider::AZLYRICS:
+                        $scraper = new \aportela\ScraperLyrics\SourceProviders\AZLyrics($this->logger);
+                        try {
+                            $this->lyrics = $scraper->scrap($this->title, $this->artist);
+                            if (!empty($this->lyrics)) {
+                                $this->source = "azlyrics";
+                                return (true);
+                            }
+                        } catch (\Throwable $e) {
+                            $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on azlyrics: " . $e->getMessage());
+                        }
+                        break;
                     default:
                         return (false);
                         break;
@@ -143,6 +155,7 @@ class Lyrics
                     \aportela\ScraperLyrics\SourceProvider::MUSIXMATCH,
                     \aportela\ScraperLyrics\SourceProvider::LYRICS_MANIA,
                     \aportela\ScraperLyrics\SourceProvider::GENIUS,
+                    \aportela\ScraperLyrics\SourceProvider::AZLYRICS,
                 ] as $provider) {
             if ($this->scrapFromSourceProvider($title, $artist, $provider)) {
                 return (true);

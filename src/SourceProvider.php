@@ -10,4 +10,5 @@ enum SourceProvider
     case MUSIXMATCH;
     case LYRICS_MANIA;
     case GENIUS;
+    case AZLYRICS;
 }
