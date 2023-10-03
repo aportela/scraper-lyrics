@@ -103,6 +103,9 @@ class Lyrics
                                 return (true);
                             }
                         } catch (\Throwable $e) {
+                            echo $e->getFile() . PHP_EOL;
+                            echo $e->getLine() . PHP_EOL;
+                            echo $e->getMessage() . PHP_EOL;
                             $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on genius: " . $e->getMessage());
                         }
                         break;
