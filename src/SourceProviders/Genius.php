@@ -57,10 +57,10 @@ final class Genius extends BaseProvider
             // cloudflare protection :-D
             $pattern = '/"visitor-time",fa: "([^"]+)"/';
             if (preg_match($pattern, $response->body, $matches) && count($matches) == 2) {
-                $url = "https://genius.com" . str_replace("\/", "/", $matches[1]);
-                echo $url . PHP_EOL;
+                return ($this->getLink($title, $artist, "https://genius.com" . str_replace("\/", "/", $matches[1])));
+            } else {
+                throw new \aportela\ScraperLyrics\Exception\HTTPException("Cloudflare (?) protection (403) error: redirect URL not found");
             }
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Cloudflare protection error");
         } else {
             throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
         }
