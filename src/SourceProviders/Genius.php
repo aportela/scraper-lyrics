@@ -12,6 +12,8 @@ final class Genius extends BaseProvider
 
     private function getLink(string $title, string $artist): string
     {
+        // required for _csrf_token COOKIE, we want recognized as a human on next requests
+        $this->http->HEAD("https://genius.com/search/embed");
         $this->http->setReferer("https://genius.com/search/embed");
         $response = $this->http->GET("https://genius.com/api/search/multi", ["per_page" => 1, "q" => sprintf("\"%s\" \"%s\"", $title, $artist)]);
         if ($response->code == 200) {
@@ -54,7 +56,7 @@ final class Genius extends BaseProvider
 
     public function scrap(string $title, string $artist): string
     {
-        // get cookies & set referer so that Genius does not realize so easily that we are using a script and not a browser
+        // get cookies so that Genius does not realize so easily that we are using a script and not a browser
         // I can't guarantee it will always work, but the request will be less suspicious in a quick analysis
         $response = $this->http->HEAD("https://genius.com/");
         $link = $this->getLink($title, $artist);
