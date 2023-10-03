@@ -47,6 +47,7 @@ final class Genius extends BaseProvider
                 throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
             }
         } else {
+            print_r($response);
             throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
         }
     }

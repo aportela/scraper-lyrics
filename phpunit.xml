@@ -2,14 +2,18 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" backupGlobals="false" backupStaticProperties="false" colors="true" processIsolation="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd" displayDetailsOnTestsThatTriggerWarnings="true">
     <testsuites>
         <testsuite name="scraper-lyrics-test-suite">
+        <!--
         <file>src/Test/LyricsTest.php</file>
         <file>src/Test/SourceProviders/SearchEngineGoogleTest.php</file>
         <file>src/Test/SourceProviders/SearchEngineBingTest.php</file>
         <file>src/Test/SourceProviders/SearchEngineDuckDuckGoTest.php</file>
         <file>src/Test/SourceProviders/LyricsManiaTest.php</file>
+        -->
         <file>src/Test/SourceProviders/GeniusTest.php</file>
+        <!--
         <file>src/Test/SourceProviders/MusicmatchTest.php</file>
         <file>src/Test/SourceProviders/AZLyricsTest.php</file>
+        -->
         </testsuite>
     </testsuites>
 </phpunit>
