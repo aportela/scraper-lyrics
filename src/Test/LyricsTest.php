@@ -16,8 +16,25 @@ final class LyricsTest extends BaseTest
         self::$lyrics = new \aportela\ScraperLyrics\Lyrics(self::$logger);
     }
 
-    public function testScrapWithoutSourceProviders(): void
+    public function testScrapWithoutTitle(): void
     {
-        $this->assertFalse(self::$lyrics->scrap("", "", []));
+        $this->expectException(\aportela\ScraperLyrics\Exception\InvalidParamsException::class);
+        $this->expectExceptionMessage("title");
+        self::$lyrics->scrap("", "");
+    }
+
+    public function testScrapWithoutArtist(): void
+    {
+        $this->expectException(\aportela\ScraperLyrics\Exception\InvalidParamsException::class);
+        $this->expectExceptionMessage("artist");
+        self::$lyrics->scrap("song title", "");
+    }
+
+    public function testScrap(): void
+    {
+        $success = self::$lyrics->scrap("Bohemian Rhapsody", "Queen");
+        $this->assertTrue($success);
+        $this->assertNotEmpty(self::$lyrics->source);
+        $this->assertNotEmpty(self::$lyrics->lyrics);
     }
 }
