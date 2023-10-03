@@ -20,7 +20,7 @@ final class Musicmatch extends BaseProvider
                 $doc = new \DomDocument();
                 if ($doc->loadHTML($response->body)) {
                     $xpath = new \DOMXPath($doc);
-                    // lyric paragraphs are contained on multiple childs of <div data-lyrics-container>
+                    // lyric links are contained on multiple childs of <ul class="tracks list thumb-list">
                     $nodes = $xpath->query('//ul[@class="tracks list thumb-list"]/li/div[@class="track-card media-card has-picture"]/div[@class="media-card-body"]/div[@class="media-card-text"]/h2/a');
                     if ($nodes != false) {
                         if ($nodes->count() > 0) {

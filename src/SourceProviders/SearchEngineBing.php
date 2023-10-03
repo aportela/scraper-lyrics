@@ -23,7 +23,6 @@ final class SearchEngineBing extends BaseProvider
                 $doc = new \DomDocument();
                 if ($doc->loadHTML(str_ireplace(array("<br>", "<br/>", "<br />"), PHP_EOL, $response->body))) {
                     $xpath = new \DOMXPath($doc);
-                    // lyric paragraphs are contained on a <div class="lyrics"> with <span> childs
                     $nodes = $xpath->query('//div[@class="lyrics"]//div');
                     if ($nodes != false) {
                         if ($nodes->count() > 0) {

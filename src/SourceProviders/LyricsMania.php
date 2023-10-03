@@ -18,7 +18,6 @@ final class LyricsMania extends BaseProvider
                 $doc = new \DomDocument();
                 if ($doc->loadHTML($response->body)) {
                     $xpath = new \DOMXPath($doc);
-                    // lyric links a <ul class="search"> with <li> <a> childs
                     $nodes = $xpath->query('//ul[@class="search"]/li/a');
                     if ($nodes != false) {
                         if ($nodes->count() > 0) {
@@ -47,7 +46,6 @@ final class LyricsMania extends BaseProvider
                 $doc = new \DomDocument();
                 if ($doc->loadHTML(str_ireplace(array("<br>", "<br/>", "<br />"), PHP_EOL, $response->body))) {
                     $xpath = new \DOMXPath($doc);
-                    // lyric paragraphs are contained in a <div class="lyrics-body">
                     $nodes = $xpath->query('//div[@class="lyrics-body"]');
                     if ($nodes != false) {
                         if ($nodes->count() > 0) {

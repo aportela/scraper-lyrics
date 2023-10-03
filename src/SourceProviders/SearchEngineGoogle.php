@@ -23,7 +23,6 @@ final class SearchEngineGoogle extends BaseProvider
                 $doc = new \DomDocument();
                 if ($doc->loadHTML($response->body)) {
                     $xpath = new \DOMXPath($doc);
-                    // lyric paragraphs are contained on a <div jsname="WbKHeb"> with <span> childs
                     $nodes = $xpath->query('//div[@jsname="WbKHeb"]//span');
                     if ($nodes != false) {
                         if ($nodes->count() > 0) {
