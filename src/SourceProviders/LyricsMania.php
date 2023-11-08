@@ -19,10 +19,8 @@ final class LyricsMania extends BaseProvider
                 if ($doc->loadHTML($response->body)) {
                     $xpath = new \DOMXPath($doc);
                     $nodes = $xpath->query('//ul[@class="search"]/li/a');
-                    if ($nodes != false) {
-                        if ($nodes->count() > 0) {
-                            return ("https://www.lyricsmania.com" . $nodes[0]->getAttribute('href'));
-                        }
+                    if ($nodes != false && $nodes->count() > 0) {
+                        return ("https://www.lyricsmania.com" . $nodes[0]->getAttribute('href'));
                     } else {
                         throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", 'ul[@class="search"]/li/a'));
                     }

@@ -135,7 +135,6 @@ class Lyrics
                         break;
                     default:
                         return (false);
-                        break;
                 }
             } else {
                 throw new \aportela\ScraperLyrics\Exception\InvalidParamsException("artist");

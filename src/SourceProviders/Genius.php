@@ -37,7 +37,7 @@ final class Genius extends BaseProvider
                                 throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("Response sections array not found"));
                             }
                         } else {
-                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("Meta status != 200", $json->meta->status));
+                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("Meta status != 200 (%d)", $json->meta->status));
                         }
                     } else {
                         throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid JSON body");
