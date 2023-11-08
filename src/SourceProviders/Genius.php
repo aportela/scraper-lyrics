@@ -48,7 +48,7 @@ final class Genius extends BaseProvider
             } else {
                 throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
             }
-        } else if ($response->code == 403) {
+        } elseif ($response->code == 403) {
             throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code . " (cloudflare protecction ?)");
         } else {
             throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
