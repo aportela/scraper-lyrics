@@ -8,8 +8,8 @@ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "vendor" . DIRECT
 
 class BaseTest extends \PHPUnit\Framework\TestCase
 {
-    protected static $logger;
-    protected static $lyrics;
+    protected static \Psr\Log\LoggerInterface $logger;
+    protected static \aportela\ScraperLyrics\Lyrics $lyrics;
 
 
     /**
@@ -17,7 +17,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$logger = new \Psr\Log\NullLogger("");
+        self::$logger = new \Psr\Log\NullLogger();
         self::$lyrics = new \aportela\ScraperLyrics\Lyrics(self::$logger);
     }
 

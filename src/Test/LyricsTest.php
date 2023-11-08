@@ -8,14 +8,6 @@ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "vendor" . DIRECT
 
 final class LyricsTest extends BaseTest
 {
-    protected static $lyrics;
-
-    public static function setUpBeforeClass(): void
-    {
-        parent::setUpBeforeClass();
-        self::$lyrics = new \aportela\ScraperLyrics\Lyrics(self::$logger);
-    }
-
     public function testScrapWithoutTitle(): void
     {
         $this->expectException(\aportela\ScraperLyrics\Exception\InvalidParamsException::class);
