@@ -22,7 +22,7 @@ final class SearchEngineDuckDuckGo extends BaseProvider
                             $data .= trim($line) . PHP_EOL;
                         };
                         if (!empty($data)) {
-                            return ($data);
+                            return (json_decode($data));
                         } else {
                             throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
                         }
