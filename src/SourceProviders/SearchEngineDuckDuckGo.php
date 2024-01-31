@@ -22,7 +22,10 @@ final class SearchEngineDuckDuckGo extends BaseProvider
                             $data .= trim($line) . PHP_EOL;
                         };
                         if (!empty($data)) {
-                            return (json_decode($data));
+                            $data = preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {
+                                return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+                            }, $data);
+                            return ($data);
                         } else {
                             throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
                         }
