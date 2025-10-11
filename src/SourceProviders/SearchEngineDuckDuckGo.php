@@ -11,6 +11,10 @@ final class SearchEngineDuckDuckGo extends BaseProvider
 
     public function scrap(string $title, string $artist): string
     {
+        // obtain possible cookies (if necessary)
+        $this->http->HEAD("https://duckduckgo.com/");
+        // set referer from root search domain
+        $this->http->setReferer("https://duckduckgo.com/");
         $response = $this->http->GET("https://duckduckgo.com/a.js", ["s" => "lyrics", "from" => "lyrics", "ta" => $artist, "tl" => $title]);
         if ($response->code == 200) {
             if (!empty($response->body)) {
