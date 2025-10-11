@@ -16,21 +16,17 @@ final class SearchEngineDuckDuckGo extends BaseProvider
             if (!empty($response->body)) {
                 $pattern = '/DDG.duckbar.add_array\(\[\{"data":\[\{"Abstract":"(.*)","AbstractSource":"Musixmatch"/';
                 if (preg_match($pattern, $response->body, $match)) {
-                    if (count($match) == 2) {
-                        $data = null;
-                        foreach (explode(PHP_EOL, str_ireplace(array("<br>", "<br/>", "<br />"), PHP_EOL, $match[1])) as $line) {
-                            $data .= trim($line) . PHP_EOL;
-                        };
-                        if (!empty($data)) {
-                            $data = preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {
-                                return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
-                            }, $data);
-                            return ($data);
-                        } else {
-                            throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
-                        }
+                    $data = null;
+                    foreach (explode(PHP_EOL, str_ireplace(array("<br>", "<br/>", "<br />"), PHP_EOL, $match[1])) as $line) {
+                        $data .= trim($line) . PHP_EOL;
+                    };
+                    if (!empty($data)) {
+                        $data = preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {
+                            return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+                        }, $data);
+                        return ($data);
                     } else {
-                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("JS array %s not found", 'DDG.duckbar.add_array'));
+                        throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
                     }
                 } else {
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("JS array %s not found", 'DDG.duckbar.add_array'));
