@@ -10,6 +10,9 @@ final class AZLyrics extends BaseProvider
         parent::__construct($logger, \aportela\HTTPRequestWrapper\UserAgent::EDGE_WINDOWS_10->value);
     }
 
+    /**
+     * @return array<string,string>
+     */
     private function getInputHidden(): array
     {
         $this->http->setReferer("https://www.azlyrics.com/");
@@ -17,9 +20,9 @@ final class AZLyrics extends BaseProvider
         if ($response->code == 200) {
             if (!empty($response->body)) {
                 $pattern1 = '/ep\.setAttribute\("name", "(\w+)"\);/';
-                if (preg_match_all($pattern1, $response->body, $nameMatches) && count($nameMatches) == 2) {
+                if (preg_match_all($pattern1, $response->body, $nameMatches)) {
                     $pattern2 = '/ep\.setAttribute\("value", "(\w+)"\);/';
-                    if (preg_match_all($pattern2, $response->body, $valueMatches) && count($valueMatches) == 2) {
+                    if (preg_match_all($pattern2, $response->body, $valueMatches)) {
                         return (["name" => $nameMatches[1][0], "value" => $valueMatches[1][0]]);
                     } else {
                         throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse('/ep\.setAttribute\("value", "(\w+)"\);/');
@@ -39,7 +42,7 @@ final class AZLyrics extends BaseProvider
     private function getLink(string $title, string $artist): string
     {
         $input = $this->getInputHidden();
-        $response = $this->http->GET("https://search.azlyrics.com/search.php", ["q" => sprintf("\"%s\" \"%s\"", $title, $artist), $input["name"] => $input["value"]]);
+        $response = $this->http->GET("https://www.azlyrics.com/search/", ["q" => sprintf("\"%s\" \"%s\"", $title, $artist), $input["name"] => $input["value"]]);
         if ($response->code == 200) {
             if (!empty($response->body)) {
                 $doc = new \DomDocument();
