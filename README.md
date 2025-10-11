@@ -4,7 +4,7 @@ Custom php lyrics scraper
 
 ## Install (composer) dependencies:
 
-```
+```Shell
 composer require aportela/scraper-lyrics
 ```
 
@@ -14,7 +14,7 @@ Please, to prevent source providers from making changes or banning the operation
 
 ## Code example:
 
-```
+```php
 require "vendor/autoload.php";
 
 $logger = new \Psr\Log\NullLogger("");
