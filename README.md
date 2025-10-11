@@ -2,6 +2,10 @@
 
 Custom php lyrics scraper
 
+## Requirements
+
+- mininum php version 8.4
+
 ## Install (composer) dependencies:
 
 ```Shell
