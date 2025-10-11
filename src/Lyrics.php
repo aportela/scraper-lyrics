@@ -145,10 +145,13 @@ class Lyrics
         return (false);
     }
 
+    /**
+     * @param array<\aportela\ScraperLyrics\SourceProvider> $providers
+     */
     public function scrap(string $title, string $artist, ?array $providers = []): bool
     {
         foreach (
-            (isset($providers) && is_array($providers) && count($providers) > 0) ?
+            (isset($providers) && count($providers) > 0) ?
                 $providers :
                 [
                     \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO,
@@ -158,7 +161,8 @@ class Lyrics
                     \aportela\ScraperLyrics\SourceProvider::LYRICS_MANIA,
                     \aportela\ScraperLyrics\SourceProvider::GENIUS,
                     \aportela\ScraperLyrics\SourceProvider::AZLYRICS,
-                ] as $provider) {
+                ] as $provider
+        ) {
             if ($this->scrapFromSourceProvider($title, $artist, $provider)) {
                 return (true);
             }
