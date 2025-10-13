@@ -50,7 +50,7 @@ if ($lyrics->scrap(
     "Queen",
     [
         \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO,
-        \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_GOOGLE
+        \aportela\ScraperLyrics\SourceProvider::MUSIXMATCH
     ]
 )) {
     echo sprintf(
