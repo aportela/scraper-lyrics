@@ -3,8 +3,6 @@
     <testsuites>
         <testsuite name="scraper-lyrics-test-suite">
         <file>src/Test/LyricsTest.php</file>
-        <file>src/Test/SourceProviders/SearchEngineGoogleTest.php</file>
-        <file>src/Test/SourceProviders/SearchEngineBingTest.php</file>
         <file>src/Test/SourceProviders/SearchEngineDuckDuckGoTest.php</file>
         <file>src/Test/SourceProviders/LyricsManiaTest.php</file>
         <!-- this test always fails (api is protected by cloudflare) on github workflow php composer actions, on "local" seems to work fine (maybe it depends on the source ip), disabled for preventing workflow errors

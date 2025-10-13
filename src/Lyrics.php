@@ -46,30 +46,6 @@ class Lyrics
         if (!empty($this->title)) {
             if (!empty($this->artist)) {
                 switch ($sourceProvider) {
-                    case \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_GOOGLE:
-                        $scraper = new \aportela\ScraperLyrics\SourceProviders\SearchEngineGoogle($this->logger);
-                        try {
-                            $this->lyrics = $scraper->scrap($this->title, $this->artist);
-                            if (!empty($this->lyrics)) {
-                                $this->source = "google";
-                                return (true);
-                            }
-                        } catch (\Throwable $e) {
-                            $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on google search engine: " . $e->getMessage());
-                        }
-                        break;
-                    case \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_BING:
-                        $scraper = new \aportela\ScraperLyrics\SourceProviders\SearchEngineBing($this->logger);
-                        try {
-                            $this->lyrics = $scraper->scrap($this->title, $this->artist);
-                            if (!empty($this->lyrics)) {
-                                $this->source = "bing";
-                                return (true);
-                            }
-                        } catch (\Throwable $e) {
-                            $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on bing search engine: " . $e->getMessage());
-                        }
-                        break;
                     case \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO:
                         $scraper = new \aportela\ScraperLyrics\SourceProviders\SearchEngineDuckDuckGo($this->logger);
                         try {
@@ -155,8 +131,6 @@ class Lyrics
                 $providers :
                 [
                     \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO,
-                    \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_GOOGLE,
-                    \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_BING,
                     \aportela\ScraperLyrics\SourceProvider::MUSIXMATCH,
                     \aportela\ScraperLyrics\SourceProvider::LYRICS_MANIA,
                     \aportela\ScraperLyrics\SourceProvider::GENIUS,
