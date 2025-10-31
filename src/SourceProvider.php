@@ -2,11 +2,11 @@
 
 namespace aportela\ScraperLyrics;
 
-enum SourceProvider
+enum SourceProvider: string
 {
-    case SEARCH_ENGINE_DUCKDUCKGO;
-    case MUSIXMATCH;
-    case LYRICS_MANIA;
-    case GENIUS;
-    case AZLYRICS;
+    case SEARCH_ENGINE_DUCKDUCKGO = "duckduckgo";
+    case MUSIXMATCH = "musicmatch";
+    case LYRICS_MANIA = "lyricsmania";
+    case GENIUS = "genius";
+    case AZLYRICS = "azlyrics";
 }

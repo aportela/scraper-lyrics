@@ -11,6 +11,8 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     protected static \Psr\Log\LoggerInterface $logger;
     protected static \aportela\ScraperLyrics\Lyrics $lyrics;
 
+    protected static string $cachePath;
+    protected static \aportela\SimpleFSCache\Cache $cache;
 
     /**
      * Called once just like normal constructor
@@ -18,28 +20,23 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     public static function setUpBeforeClass(): void
     {
         self::$logger = new \Psr\Log\NullLogger();
-        self::$lyrics = new \aportela\ScraperLyrics\Lyrics(self::$logger);
+        self::$cache = new \aportela\SimpleFSCache\Cache(self::$logger, \aportela\SimpleFSCache\CacheFormat::TXT, dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . "cache", false);
+        self::$lyrics = new \aportela\ScraperLyrics\Lyrics(self::$logger, self::$cache);
     }
 
     /**
      * Initialize the test case
      * Called for every defined test
      */
-    public function setUp(): void
-    {
-    }
+    public function setUp(): void {}
 
     /**
      * Clean up the test case, called for every defined test
      */
-    public function tearDown(): void
-    {
-    }
+    public function tearDown(): void {}
 
     /**
      * Clean up the whole test class
      */
-    public static function tearDownAfterClass(): void
-    {
-    }
+    public static function tearDownAfterClass(): void {}
 }
