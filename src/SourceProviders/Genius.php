@@ -71,6 +71,10 @@ final class Genius extends BaseProvider
                     $xpath = new \DOMXPath($doc);
                     $nodes = $xpath->query('//div[@data-lyrics-container="true"]');
                     if ($nodes != false) {
+                        // TODO: trim intro (first line of first node textContent)
+                        /** example:
+                         * [textContent] => 502 ContributorsTranslationsDeutschTürkçeไทย (Thai)EspañolPortuguêsفارسیFrançaisPolskiРусский (Russian)ČeskyBohemian Rhapsody LyricsWidely considered to be one of the greatest songs of all time, “Bohemian Rhapsody” was the first single released from Queen’s fourth studio album, A Night at the Opera. It became an international success… Read More [Intro]
+                         */
                         if ($nodes->count() > 0) {
                             $data = null;
                             foreach ($nodes as $key => $node) {
