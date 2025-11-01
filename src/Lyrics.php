@@ -41,10 +41,10 @@ class Lyrics
         return (trim($artist));
     }
 
-    private function saveCache(string $mbId, string $raw): bool
+    private function saveCache(string $hash, string $raw): bool
     {
         if ($this->cache !== null) {
-            return ($this->cache->save($mbId, $raw));
+            return ($this->cache->save($hash, $raw));
         } else {
             return (false);
         }
