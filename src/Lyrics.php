@@ -33,12 +33,12 @@ class Lyrics
     public function parseTitle(string $title): string
     {
         // ugly hack to scrap "live versions"
-        return (trim(preg_replace("/ \(live\)$/i", "", trim($title))));
+        return (mb_trim(preg_replace("/ \(live\)$/i", "", mb_trim($title))));
     }
 
     public function parseArtist(string $artist): string
     {
-        return (trim($artist));
+        return (mb_trim($artist));
     }
 
     private function saveCache(string $hash, string $raw): bool
