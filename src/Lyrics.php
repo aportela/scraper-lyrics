@@ -6,7 +6,7 @@ class Lyrics
 {
     protected \Psr\Log\LoggerInterface $logger;
     protected \aportela\HTTPRequestWrapper\HTTPRequest $http;
-    protected \aportela\SimpleFSCache\Cache $cache;
+    protected ?\aportela\SimpleFSCache\Cache $cache = null;
 
     // (AT THIS TIME) this is REQUIRED/IMPORTANT, with another user agents (on GOOGLE) the search response is not the same (do not include lyrics!)
     public const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/116.0.1938.81";
@@ -16,7 +16,7 @@ class Lyrics
     public ?string $lyrics;
     public ?string $source;
 
-    public function __construct(\Psr\Log\LoggerInterface $logger, \aportela\SimpleFSCache\Cache $cache)
+    public function __construct(\Psr\Log\LoggerInterface $logger, ?\aportela\SimpleFSCache\Cache $cache = null)
     {
         $this->logger = $logger;
         $this->logger->debug("ScraperLyrics\Lyrics::__construct");
@@ -43,14 +43,22 @@ class Lyrics
 
     private function saveCache(string $mbId, string $raw): bool
     {
-        return ($this->cache->save($mbId, $raw));
+        if ($this->cache !== null) {
+            return ($this->cache->save($mbId, $raw));
+        } else {
+            return (false);
+        }
     }
 
     private function getCache(string $hash): bool
     {
-        if ($cache = $this->cache->get($hash)) {
-            $this->lyrics = $cache;
-            return (true);
+        if ($this->cache !== null) {
+            if ($cache = $this->cache->get($hash)) {
+                $this->lyrics = $cache;
+                return (true);
+            } else {
+                return (false);
+            }
         } else {
             return (false);
         }
