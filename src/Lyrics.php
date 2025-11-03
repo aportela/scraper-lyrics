@@ -19,16 +19,12 @@ class Lyrics
     public function __construct(\Psr\Log\LoggerInterface $logger, ?\aportela\SimpleFSCache\Cache $cache = null)
     {
         $this->logger = $logger;
-        $this->logger->debug("ScraperLyrics\Lyrics::__construct");
         $this->lyrics = null;
         $this->source = null;
         $this->cache = $cache;
     }
 
-    public function __destruct()
-    {
-        $this->logger->debug("ScraperLyrics\Lyrics::__destruct");
-    }
+    public function __destruct() {}
 
     public function parseTitle(string $title): string
     {
@@ -81,6 +77,7 @@ class Lyrics
             if (!empty($this->artist)) {
                 $cacheHash = md5(mb_strtolower(mb_trim($this->title) . mb_trim($this->artist) . $sourceProvider->value));
                 if (! $this->getCache($cacheHash)) {
+                    $scraped = false;
                     switch ($sourceProvider) {
                         case \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO:
                             $scraper = new \aportela\ScraperLyrics\SourceProviders\SearchEngineDuckDuckGo($this->logger);
@@ -89,7 +86,7 @@ class Lyrics
                                 if (!empty($this->lyrics)) {
                                     $this->source = $sourceProvider->value;
                                     $this->saveCache($cacheHash, $this->lyrics);
-                                    return (true);
+                                    $scraped = true;
                                 }
                             } catch (\Throwable $e) {
                                 $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on duckduckgo search engine: " . $e->getMessage());
@@ -102,7 +99,7 @@ class Lyrics
                                 if (!empty($this->lyrics)) {
                                     $this->source = $sourceProvider->value;
                                     $this->saveCache($cacheHash, $this->lyrics);
-                                    return (true);
+                                    $scraped = true;
                                 }
                             } catch (\Throwable $e) {
                                 $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on lyricsmania: " . $e->getMessage());
@@ -115,12 +112,9 @@ class Lyrics
                                 if (!empty($this->lyrics)) {
                                     $this->source = $sourceProvider->value;
                                     $this->saveCache($cacheHash, $this->lyrics);
-                                    return (true);
+                                    $scraped = true;
                                 }
                             } catch (\Throwable $e) {
-                                echo $e->getFile() . PHP_EOL;
-                                echo $e->getLine() . PHP_EOL;
-                                echo $e->getMessage() . PHP_EOL;
                                 $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on genius: " . $e->getMessage());
                             }
                             break;
@@ -131,7 +125,7 @@ class Lyrics
                                 if (!empty($this->lyrics)) {
                                     $this->source = $sourceProvider->value;
                                     $this->saveCache($cacheHash, $this->lyrics);
-                                    return (true);
+                                    $scraped = true;
                                 }
                             } catch (\Throwable $e) {
                                 $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on musicmatch: " . $e->getMessage());
@@ -144,7 +138,7 @@ class Lyrics
                                 if (!empty($this->lyrics)) {
                                     $this->source = $sourceProvider->value;
                                     $this->saveCache($cacheHash, $this->lyrics);
-                                    return (true);
+                                    $scraped = true;
                                 }
                             } catch (\Throwable $e) {
                                 $this->logger->debug("ScraperLyrics\Lyrics::search - Error scraping on azlyrics: " . $e->getMessage());
@@ -153,14 +147,17 @@ class Lyrics
                         default:
                             return (false);
                     }
+                    return ($scraped);
                 } else {
                     $this->source = $sourceProvider->value;
                     return (true);
                 }
             } else {
+                $this->logger->error("\aportela\ScraperLyrics\Lyrics::scrapFromSourceProvider - Error: invalid title: {$title}");
                 throw new \InvalidArgumentException("artist");
             }
         } else {
+            $this->logger->error("\aportela\ScraperLyrics\Lyrics::scrapFromSourceProvider - Error: invalid artist: {$artist}");
             throw new \InvalidArgumentException("title");
         }
         return (false);
