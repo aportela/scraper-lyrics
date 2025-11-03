@@ -20,7 +20,7 @@ final class SearchEngineDuckDuckGo extends BaseProvider
             if (!empty($response->body)) {
                 $pattern = '/DDG.duckbar.add_array\(\[\{"data":\[\{"Abstract":"(.*)","AbstractSource":"Musixmatch"/';
                 if (preg_match($pattern, $response->body, $match)) {
-                    if (count($match) == 2) {
+                    if (! empty($match[1])) {
                         $data = $this->parseHTMLCRLF($match[1]);
                         $data = $this->parseHTMLUnicode($data);
                         $data = mb_trim($data);
