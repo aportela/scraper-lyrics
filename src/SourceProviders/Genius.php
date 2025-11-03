@@ -29,38 +29,39 @@ final class Genius extends BaseProvider
                                             return ($hit->result->url);
                                         }
                                     }
-                                    // TODO: logger
-                                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
+                                    $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getLink - Error: missing property (response->sections[]->hits[]->result->url)");
+                                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: missing property (response->sections[]->hits->result->url))");
                                 } else {
-                                    // TODO: logger
-                                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Response sections hits array not found");
+                                    $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getLink - Error: missing property (response->sections[]->hits[])");
+                                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: missing property (response->sections[]->hits[])");
                                 }
                             } else {
-                                // TODO: logger
-                                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Response sections array not found");
+                                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getLink - Error: missing property (response->sections[])");
+                                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: missing property (response->sections[])");
                             }
                         } else {
-                            // TODO: logger
-                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("Meta status != 200 (%d)", $json->meta->status));
+                            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getLink - Error: missing property (meta->status == 200)");
+                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: missing property (meta->status == 200)");
                         }
                     } else {
-                        // TODO: logger
-                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid JSON body");
+                        $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::getLink - Error: invalid JSON", [json_last_error(), json_last_error_msg()]);
+                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid JSON: " . json_last_error_msg());
                     }
                 } else {
-                    // TODO: logger
-                    throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP content type: " . $response->getContentType());
+                    $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::getLink - Error: invalid HTTP content type", [$response->getContentType()]);
+                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTTP content type: " . $response->getContentType());
                 }
             } else {
-                // TODO: logger
-                throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
+                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::getLink - Error: empty body");
+                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: empty body");
             }
         } elseif ($response->code == 403) {
             // TODO: logger
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code . " (cloudflare protecction ?)");
+            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::getLink - Error: invalid HTTP response code: {$response->code}");
+            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: {$response->code}");
         } else {
-            // TODO: logger
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
+            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::getLink - Error: invalid HTTP response code: {$response->code}");
+            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: {$response->code}");
         }
     }
 
@@ -78,38 +79,39 @@ final class Genius extends BaseProvider
                 $doc = new \DomDocument();
                 if ($doc->loadHTML(str_ireplace(array("<br>", "<br/>", "<br />"), PHP_EOL, $response->body))) {
                     $xpath = new \DOMXPath($doc);
-                    $nodes = $xpath->query('//div[@data-lyrics-container="true"]');
-                    if ($nodes != false) {
+                    $expression = '//div[@data-lyrics-container="true"]';
+                    $nodes = $xpath->query($expression);
+                    if ($nodes !== false && $nodes->count() > 0) {
                         // TODO: trim intro (first line of first node textContent)
                         /** example:
                          * [textContent] => 502 ContributorsTranslationsDeutschTürkçeไทย (Thai)EspañolPortuguêsفارسیFrançaisPolskiРусский (Russian)ČeskyBohemian Rhapsody LyricsWidely considered to be one of the greatest songs of all time, “Bohemian Rhapsody” was the first single released from Queen’s fourth studio album, A Night at the Opera. It became an international success… Read More [Intro]
                          */
-                        if ($nodes->count() > 0) {
-                            $data = null;
-                            foreach ($nodes as $key => $node) {
-                                $data .= mb_trim($node->textContent) . PHP_EOL;
-                            }
-                            $data = mb_trim($data);
-                            if (!empty($data)) {
-                                return ($data);
-                            } else {
-                                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::scrap - Error: empty lyrics");
-                                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
-                            }
+                        $data = null;
+                        foreach ($nodes as $key => $node) {
+                            $data .= mb_trim($node->textContent) . PHP_EOL;
+                        }
+                        $data = mb_trim($data);
+                        if (!empty($data)) {
+                            return ($data);
                         } else {
-                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@data-lyrics-container="true"]'));
+                            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::scrap - Error: empty lyrics");
+                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
                         }
                     } else {
-                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@data-lyrics-container="true"]'));
+                        $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::scrap - Error: missing html xpath nodes", [$expression]);
+                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Missing html xpath nodes: {$expression}");
                     }
                 } else {
+                    $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::scrap - Error: invalid html body");
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTML body");
                 }
             } else {
-                throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
+                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::scrap - Error: empty body");
+                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: empty body");
             }
         } else {
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
+            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::scrap - Error: invalid HTTP response code: {$response->code}");
+            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: {$response->code}");
         }
     }
 }

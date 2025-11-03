@@ -27,34 +27,35 @@ final class Musicmatch extends BaseProvider
                 if ($doc->loadHTML(str_ireplace(array("<br>", "<br/>", "<br />"), PHP_EOL, $response->body))) {
                     $xpath = new \DOMXPath($doc);
                     // lyric paragraphs are contained on multiple p childs of <div class="track-widget-body">
-                    $nodes = $xpath->query('//div[contains(@class, "r-11rrj2j") and contains(@class, "r-15zivkp") and @dir="auto"]');
-                    if ($nodes != false) {
-                        if ($nodes->count() > 0) {
-                            $data = null;
-                            foreach ($nodes as $key => $node) {
-                                $data .= mb_trim($node->textContent) . PHP_EOL;
-                            }
-                            $data = mb_trim($data);
-                            if (!empty($data)) {
-                                return ($data);
-                            } else {
-                                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Musicmatch::scrap - Error: empty lyrics");
-                                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
-                            }
+                    $expression = '//div[contains(@class, "r-11rrj2j") and contains(@class, "r-15zivkp") and @dir="auto"]';
+                    $nodes = $xpath->query($expression);
+                    if ($nodes !== false && $nodes->count() > 0) {
+                        $data = null;
+                        foreach ($nodes as $key => $node) {
+                            $data .= mb_trim($node->textContent) . PHP_EOL;
+                        }
+                        $data = mb_trim($data);
+                        if (!empty($data)) {
+                            return ($data);
                         } else {
-                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@class="css-146c3p1 r-1inkyih r-11rrj2j r-13awgt0 r-fdjqy7 r-1dxmaum r-1it3c9n r-135wba7"]'));
+                            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Musicmatch::scrap - Error: empty lyrics");
+                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
                         }
                     } else {
-                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@class="css-146c3p1 r-1inkyih r-11rrj2j r-13awgt0 r-fdjqy7 r-1dxmaum r-1it3c9n r-135wba7"]'));
+                        $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Musicmatch::scrap - Error: missing html xpath nodes", [$expression]);
+                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Missing html xpath nodes: {$expression}");
                     }
                 } else {
+                    $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Musicmatch::scrap - Error: invalid html body");
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTML body");
                 }
             } else {
-                throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
+                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Musicmatch::scrap - Error: empty body");
+                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: empty body");
             }
         } else {
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
+            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Musicmatch::scrap - Error: invalid HTTP response code: {$response->code}");
+            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: {$response->code}");
         }
     }
 }

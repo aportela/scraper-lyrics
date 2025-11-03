@@ -18,20 +18,25 @@ final class LyricsMania extends BaseProvider
                 $doc = new \DomDocument();
                 if ($doc->loadHTML($response->body)) {
                     $xpath = new \DOMXPath($doc);
-                    $nodes = $xpath->query('//ul[@class="search"]/li/a');
+                    $expression = '//ul[@class="search"]/li/a';
+                    $nodes = $xpath->query($expression);
                     if ($nodes != false && $nodes->count() > 0) {
                         return ("https://www.lyricsmania.com" . $nodes[0]->getAttribute('href'));
                     } else {
-                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", 'ul[@class="search"]/li/a'));
+                        $this->logger->error("\aportela\ScraperLyrics\SourceProviders\LyricsMania::getLink - Error: missing html xpath nodes", [$expression]);
+                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Missing html xpath nodes: {$expression}");
                     }
                 } else {
+                    $this->logger->error("\aportela\ScraperLyrics\SourceProviders\LyricsMania::getLink - Error: invalid html body");
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTML body");
                 }
             } else {
-                throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
+                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\LyricsMania::getLink - Error: empty body");
+                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: empty body");
             }
         } else {
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
+            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\LyricsMania::getLink - Error: invalid HTTP response code: {$response->code}");
+            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: {$response->code}");
         }
     }
 
@@ -44,34 +49,35 @@ final class LyricsMania extends BaseProvider
                 $doc = new \DomDocument();
                 if ($doc->loadHTML(str_ireplace(array("<br>", "<br/>", "<br />"), PHP_EOL, $response->body))) {
                     $xpath = new \DOMXPath($doc);
-                    $nodes = $xpath->query('//div[@class="lyrics-body"]');
-                    if ($nodes != false) {
-                        if ($nodes->count() > 0) {
-                            $data = null;
-                            foreach ($nodes as $key => $node) {
-                                $data .= mb_trim($node->textContent) . PHP_EOL;
-                            }
-                            $data = mb_trim($data);
-                            if (!empty($data)) {
-                                return ($data);
-                            } else {
-                                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\LyricsMania::scrap - Error: empty lyrics");
-                                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
-                            }
+                    $expression = '//div[@class="lyrics-body"]';
+                    $nodes = $xpath->query($expression);
+                    if ($nodes !== false && $nodes->count() > 0) {
+                        $data = null;
+                        foreach ($nodes as $key => $node) {
+                            $data .= mb_trim($node->textContent) . PHP_EOL;
+                        }
+                        $data = mb_trim($data);
+                        if (!empty($data)) {
+                            return ($data);
                         } else {
-                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@class="lyrics-body"]'));
+                            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\LyricsMania::scrap - Error: empty lyrics");
+                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
                         }
                     } else {
-                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@class="lyrics-body"]'));
+                        $this->logger->error("\aportela\ScraperLyrics\SourceProviders\LyricsMania::scrap - Error: missing html xpath nodes", [$expression]);
+                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Missing html xpath nodes: {$expression}");
                     }
                 } else {
+                    $this->logger->error("\aportela\ScraperLyrics\SourceProviders\LyricsMania::scrap - Error: invalid html body");
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTML body");
                 }
             } else {
-                throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
+                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\LyricsMania::scrap - Error: empty body");
+                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: empty body");
             }
         } else {
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
+            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\LyricsMania::scrap - Error: invalid HTTP response code: {$response->code}");
+            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: {$response->code}");
         }
     }
 }
