@@ -33,7 +33,13 @@ class Lyrics
     public function parseTitle(string $title): string
     {
         // ugly hack to scrap "live versions"
-        return (mb_trim(preg_replace("/ \(live\)$/i", "", mb_trim($title))));
+        // example: "We are the champions (live)" is converted to "We are the champions"
+        $replacedTitle = preg_replace("/ \(live\)$/i", "", mb_trim($title));
+        if ($replacedTitle !== null) {
+            return (mb_trim($replacedTitle));
+        } else {
+            return ("");
+        }
     }
 
     public function parseArtist(string $artist): string
@@ -52,9 +58,11 @@ class Lyrics
 
     private function getCache(string $hash): bool
     {
+        $this->lyrics = null;
         if ($this->cache !== null) {
-            if ($cache = $this->cache->get($hash)) {
-                $this->lyrics = $cache;
+            $cacheData = $this->cache->get($hash);
+            if (is_string($cacheData)) {
+                $this->lyrics = $cacheData;
                 return (true);
             } else {
                 return (false);
