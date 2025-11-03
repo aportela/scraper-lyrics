@@ -23,7 +23,6 @@ require "vendor/autoload.php";
 
 $logger = new \Psr\Log\NullLogger("");
 
-
 $cache = null;
 // uncomment the following lines for storing into disk cache the lyrics
 //$cachePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . "cache";
@@ -85,7 +84,6 @@ if ($lyrics->scrapFromSourceProvider(
         $lyrics->getLyrics()
     );
 }
-
 ```
 
 ![PHP Composer](https://github.com/aportela/scraper-lyrics/actions/workflows/php.yml/badge.svg)
