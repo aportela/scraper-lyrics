@@ -10,14 +10,14 @@ final class LyricsTest extends BaseTest
 {
     public function testScrapWithoutTitle(): void
     {
-        $this->expectException(\aportela\ScraperLyrics\Exception\InvalidParamsException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("title");
         self::$lyrics->scrap("", "");
     }
 
     public function testScrapWithoutArtist(): void
     {
-        $this->expectException(\aportela\ScraperLyrics\Exception\InvalidParamsException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("artist");
         self::$lyrics->scrap("song title", "");
     }

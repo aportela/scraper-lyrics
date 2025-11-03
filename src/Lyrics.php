@@ -150,10 +150,10 @@ class Lyrics
                     return (true);
                 }
             } else {
-                throw new \aportela\ScraperLyrics\Exception\InvalidParamsException("artist");
+                throw new \InvalidArgumentException("artist");
             }
         } else {
-            throw new \aportela\ScraperLyrics\Exception\InvalidParamsException("title");
+            throw new \InvalidArgumentException("title");
         }
         return (false);
     }
