@@ -21,7 +21,9 @@ abstract class BaseProvider implements ISourceProvider
         $this->http = new \aportela\HTTPRequestWrapper\HTTPRequest($this->logger, $customUserAgent);
     }
 
-    public abstract function scrap(string $title, string $artist): string;
+    abstract public function scrap(string $title, string $artist): string;
 
-    public function __destruct() {}
+    public function __destruct()
+    {
+    }
 }
