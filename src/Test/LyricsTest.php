@@ -26,7 +26,7 @@ final class LyricsTest extends BaseTest
     {
         $success = self::$lyrics->scrap("Bohemian Rhapsody", "Queen");
         $this->assertTrue($success);
-        $this->assertNotEmpty(self::$lyrics->source);
-        $this->assertNotEmpty(self::$lyrics->lyrics);
+        $this->assertNotEmpty(self::$lyrics->getSource());
+        $this->assertNotEmpty(self::$lyrics->getLyrics());
     }
 }

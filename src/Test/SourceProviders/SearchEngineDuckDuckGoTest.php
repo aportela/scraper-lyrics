@@ -17,7 +17,7 @@ final class SearchEngineDuckDuckGoTest extends \aportela\ScraperLyrics\Test\Base
     {
         $success = self::$lyrics->scrap("Bohemian Rhapsody", "Queen", [\aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO]);
         $this->assertTrue($success);
-        $this->assertNotEmpty(self::$lyrics->lyrics);
-        $this->assertEquals(self::$lyrics->source, "duckduckgo");
+        $this->assertNotEmpty(self::$lyrics->getLyrics());
+        $this->assertEquals(self::$lyrics->getSource(), "duckduckgo");
     }
 }

@@ -17,7 +17,7 @@ final class AZLyricsTest extends \aportela\ScraperLyrics\Test\BaseTest
     {
         $success = self::$lyrics->scrap("Bohemian Rhapsody", "Queen", [\aportela\ScraperLyrics\SourceProvider::AZLYRICS]);
         $this->assertTrue($success);
-        $this->assertNotEmpty(self::$lyrics->lyrics);
-        $this->assertEquals(self::$lyrics->source, "azlyrics");
+        $this->assertNotEmpty(self::$lyrics->getLyrics());
+        $this->assertEquals(self::$lyrics->getSource(), "azlyrics");
     }
 }
