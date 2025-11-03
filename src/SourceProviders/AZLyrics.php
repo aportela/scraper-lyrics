@@ -54,17 +54,16 @@ final class AZLyrics extends BaseProvider
                 libxml_use_internal_errors(true);
                 if ($doc->loadHTML($response->body)) {
                     $xpath = new \DOMXPath($doc);
-                    $nodes = $xpath->query('//table/tr/td/a');
-                    if ($nodes != false) {
-                        if ($nodes->count() > 0) {
-                            return ($nodes[0]->getAttribute("href"));
-                        } else {
-                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//form[@class="search"]/input[@type="hidden"]'));
-                        }
+                    $expression = '//table/tr/td/a';
+                    $nodes = $xpath->query($expression);
+                    if ($nodes !== false && $nodes->count() > 0) {
+                        return ($nodes[0]->getAttribute("href"));
                     } else {
-                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//form[@class="search"]/input[@type="hidden"]'));
+                        $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getLink - Error: missing html xpath nodes", [$expression]);
+                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Missing html xpath nodes: {$expression}");
                     }
                 } else {
+                    $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getLink - Error: invalid html body");
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTML body");
                 }
             } else {
@@ -85,24 +84,24 @@ final class AZLyrics extends BaseProvider
         if ($response->code == 200) {
             if (!empty($response->body)) {
                 $doc = new \DomDocument();
-                if ($doc->loadHTML(str_ireplace(array("<br>", "<br/>", "<br />"), "", $response->body))) {
+                if ($doc->loadHTML($this->parseHTMLCRLF($response->body))) {
                     $xpath = new \DOMXPath($doc);
-                    $nodes = $xpath->query('//div[@class="col-xs-12 col-lg-8 text-center"]/div');
-                    if ($nodes != false) {
-                        if ($nodes->count() == 6) {
-                            $data = mb_trim($nodes[4]->textContent);
-                            if (!empty($data)) {
-                                return ($data);
-                            } else {
-                                throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
-                            }
+                    $expression = '//div[@class="col-xs-12 col-lg-8 text-center"]/div';
+                    $nodes = $xpath->query($expression);
+                    if ($nodes !== false && $nodes->count() == 6) {
+                        $data = mb_trim($nodes[4]->textContent);
+                        if (!empty($data)) {
+                            return ($data);
                         } else {
-                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@data-lyrics-container="true"]'));
+                            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::scrap - Error: empty lyrics");
+                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
                         }
                     } else {
-                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@data-lyrics-container="true"]'));
+                        $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::scrap - Error: missing html xpath nodes", [$expression]);
+                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Missing html xpath nodes: {$expression}");
                     }
                 } else {
+                    $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::scrap - Error: invalid html body");
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTML body");
                 }
             } else {
