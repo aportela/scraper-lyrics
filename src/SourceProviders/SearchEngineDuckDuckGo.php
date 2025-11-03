@@ -23,6 +23,7 @@ final class SearchEngineDuckDuckGo extends BaseProvider
                     if (count($match) == 2) {
                         $data = $this->parseHTMLCRLF($match[1]);
                         $data = $this->parseHTMLUnicode($data);
+                        $data = mb_trim($data);
                         if (! empty($data)) {
                             return ($data);
                         } else {
