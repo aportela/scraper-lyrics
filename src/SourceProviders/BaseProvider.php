@@ -11,7 +11,9 @@ abstract class BaseProvider implements ISourceProvider
     {
         $this->logger = $logger;
         $loadedExtensions = get_loaded_extensions();
-        if (!in_array("libxml", $loadedExtensions)) {
+        if (!in_array("dom", $loadedExtensions)) {
+            $this->logger->critical("\aportela\ScraperLyrics\SourceProviders\BaseProvider::__construct - Error: dom extension not found", $loadedExtensions);
+        } elseif (!in_array("libxml", $loadedExtensions)) {
             $this->logger->critical("\aportela\ScraperLyrics\SourceProviders\BaseProvider::__construct - Error: libxml extension not found", $loadedExtensions);
             throw new \aportela\ScraperLyrics\Exception\ExtensionMissingException("missing libxml extension, loaded extensions: " . implode(", ", $loadedExtensions));
         } elseif (!in_array("SimpleXML", $loadedExtensions)) {
