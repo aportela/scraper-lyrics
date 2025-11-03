@@ -30,7 +30,7 @@ final class Genius extends BaseProvider
                                         }
                                     }
                                     // TODO: logger
-                                    throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
+                                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
                                 } else {
                                     // TODO: logger
                                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Response sections hits array not found");
@@ -89,10 +89,12 @@ final class Genius extends BaseProvider
                             foreach ($nodes as $key => $node) {
                                 $data .= mb_trim($node->textContent) . PHP_EOL;
                             }
+                            $data = mb_trim($data);
                             if (!empty($data)) {
                                 return ($data);
                             } else {
-                                throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
+                                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Genius::scrap - Error: empty lyrics");
+                                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
                             }
                         } else {
                             throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@data-lyrics-container="true"]'));

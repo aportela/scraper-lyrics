@@ -24,13 +24,14 @@ final class SearchEngineDuckDuckGo extends BaseProvider
                         $data = $this->parseHTMLCRLF($match[1]);
                         $data = $this->parseHTMLUnicode($data);
                         $data = mb_trim($data);
-                        if (! empty($data)) {
+                        if (!empty($data)) {
                             return ($data);
                         } else {
-                            throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
+                            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\SearchEngineDuckDuckGo::scrap - Error: empty lyrics");
+                            throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
                         }
                     } else {
-                        throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
+                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("");
                     }
                 } else {
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("JS array %s not found", 'DDG.duckbar.add_array'));

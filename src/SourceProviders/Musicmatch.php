@@ -38,7 +38,8 @@ final class Musicmatch extends BaseProvider
                             if (!empty($data)) {
                                 return ($data);
                             } else {
-                                throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
+                                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\Musicmatch::scrap - Error: empty lyrics");
+                                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
                             }
                         } else {
                             throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("HTML Nodes %s not found", '//div[@class="css-146c3p1 r-1inkyih r-11rrj2j r-13awgt0 r-fdjqy7 r-1dxmaum r-1it3c9n r-135wba7"]'));
