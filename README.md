@@ -19,31 +19,33 @@ Please, to prevent source providers from making changes or banning the operation
 ## Code example:
 
 ```php
-require "vendor/autoload.php";
+<?php
 
-$logger = new \Psr\Log\NullLogger("");
+    require "vendor/autoload.php";
 
-$cache = null;
-// uncomment the following lines for storing into disk cache the lyrics
-//$cachePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . "cache";
-//$cache = new \aportela\SimpleFSCache\Cache($logger, \aportela\SimpleFSCache\CacheFormat::TXT, $cachePath);
-$lyrics = new \aportela\ScraperLyrics\Lyrics($logger, $cache);
+    $logger = new \Psr\Log\NullLogger("");
 
-/**
-Search/Scrap on all providers
-*/
-if ($lyrics->scrap(
-    "Bohemian Rhapsody",
-    "Queen"
-)) {
-    echo sprintf(
-        "<H1>Title: %s</h1><H2>Artist: %s</H2><H3>Source: %s</H3><PRE>%s</PRE>",
-        $lyrics->getTitle(),
-        $lyrics->getArtist(),
-        $lyrics->getSource(),
-        $lyrics->getLyrics()
-    );
-}
+    $cache = null;
+    // uncomment the following lines for storing into disk cache the lyrics
+    //$cachePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . "cache";
+    //$cache = new \aportela\SimpleFSCache\Cache($logger, \aportela\SimpleFSCache\CacheFormat::TXT, $cachePath);
+    $lyrics = new \aportela\ScraperLyrics\Lyrics($logger, $cache);
+
+    /**
+    Search/Scrap on all providers
+    */
+    if ($lyrics->scrap(
+        "Bohemian Rhapsody",
+        "Queen"
+    )) {
+        echo sprintf(
+            "<H1>Title: %s</h1><H2>Artist: %s</H2><H3>Source: %s</H3><PRE>%s</PRE>",
+            $lyrics->getTitle(),
+            $lyrics->getArtist(),
+            $lyrics->getSource(),
+            $lyrics->getLyrics()
+        );
+    }
 
 /**
     Search/Scrap on custom scrap providers
