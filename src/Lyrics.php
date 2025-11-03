@@ -24,7 +24,9 @@ class Lyrics
         $this->cache = $cache;
     }
 
-    public function __destruct() {}
+    public function __destruct()
+    {
+    }
 
     public function getTitle(): ?string
     {
