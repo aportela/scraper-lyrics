@@ -5,6 +5,7 @@ namespace aportela\ScraperLyrics\SourceProviders;
 final class Musicmatch extends BaseProvider
 {
     private const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/116.0.1938.81";
+
     public function __construct(\Psr\Log\LoggerInterface $logger)
     {
         parent::__construct($logger, self::USER_AGENT);
