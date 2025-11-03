@@ -11,10 +11,10 @@ class Lyrics
     // (AT THIS TIME) this is REQUIRED/IMPORTANT, with another user agents (on GOOGLE) the search response is not the same (do not include lyrics!)
     public const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/116.0.1938.81";
 
-    public ?string $title;
-    public ?string $artist;
-    public ?string $lyrics;
-    public ?string $source;
+    private ?string $title;
+    private ?string $artist;
+    private ?string $lyrics;
+    private ?string $source;
 
     public function __construct(\Psr\Log\LoggerInterface $logger, ?\aportela\SimpleFSCache\Cache $cache = null)
     {
@@ -25,6 +25,26 @@ class Lyrics
     }
 
     public function __destruct() {}
+
+    public function getTitle(): ?string
+    {
+        return ($this->title);
+    }
+
+    public function getArtist(): ?string
+    {
+        return ($this->artist);
+    }
+
+    public function getLyrics(): ?string
+    {
+        return ($this->lyrics);
+    }
+
+    public function getSource(): ?string
+    {
+        return ($this->source);
+    }
 
     public function parseTitle(string $title): string
     {
