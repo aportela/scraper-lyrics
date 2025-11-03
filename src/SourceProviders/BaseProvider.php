@@ -23,7 +23,49 @@ abstract class BaseProvider implements ISourceProvider
 
     abstract public function scrap(string $title, string $artist): string;
 
-    public function __destruct()
+    public function __destruct() {}
+
+    public function parseHTMLCRLF(string $html): string
     {
+        $data = "";
+        if (! empty($html)) {
+            foreach (
+                explode(
+                    PHP_EOL,
+                    str_ireplace(
+                        [
+                            "<br>",
+                            "<br/>",
+                            "<br />"
+                        ],
+                        PHP_EOL,
+                        $html
+                    )
+                )
+                as $line
+            ) {
+                $data .= mb_trim($line) . PHP_EOL;
+            };
+        }
+        return ($data);
+    }
+
+    public function parseHTMLUnicode(string $html): string
+    {
+        $data = "";
+        if (! empty($html)) {
+            $data = preg_replace_callback(
+                '/\\\\u([0-9a-fA-F]{4})/',
+                function ($match) {
+                    return mb_convert_encoding(
+                        pack('H*', $match[1]),
+                        'UTF-8',
+                        'UCS-2BE'
+                    );
+                },
+                $html
+            );
+        }
+        return ($data);
     }
 }
