@@ -21,20 +21,25 @@ final class AZLyrics extends BaseProvider
             if (!empty($response->body)) {
                 $pattern1 = '/ep\.setAttribute\("name", "(\w+)"\);/';
                 if (preg_match_all($pattern1, $response->body, $nameMatches)) {
+                    // TODO: check $nameMatches && $valueMatches
                     $pattern2 = '/ep\.setAttribute\("value", "(\w+)"\);/';
                     if (preg_match_all($pattern2, $response->body, $valueMatches)) {
                         return (["name" => $nameMatches[1][0], "value" => $valueMatches[1][0]]);
                     } else {
-                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse('/ep\.setAttribute\("value", "(\w+)"\);/');
+                        $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getInputHidden - Error: missing setAttribute name pattern");
+                        throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: missing setAttribute name pattern");
                     }
                 } else {
-                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse('/ep\.setAttribute\("name", "(\w+)"\);/');
+                    $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getInputHidden - Error: missing setAttribute value pattern");
+                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: missing setAttribute value pattern");
                 }
             } else {
-                throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
+                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getInputHidden - Error: empty body");
+                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: empty body");
             }
         } else {
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
+            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getInputHidden - Error: invalid HTTP response code: {$response->code}");
+            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: {$response->code}");
         }
     }
 
@@ -63,10 +68,12 @@ final class AZLyrics extends BaseProvider
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTML body");
                 }
             } else {
-                throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
+                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getLink - Error: empty body");
+                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: empty body");
             }
         } else {
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
+            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getLink - Error: invalid HTTP response code: {$response->code}");
+            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: {$response->code}");
         }
     }
 
@@ -99,10 +106,12 @@ final class AZLyrics extends BaseProvider
                     throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid HTML body");
                 }
             } else {
-                throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
+                $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::scrap - Error: empty body");
+                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Error: empty body");
             }
         } else {
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
+            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::scrap - Error: invalid HTTP response code: {$response->code}");
+            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: {$response->code}");
         }
     }
 }
