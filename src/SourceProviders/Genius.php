@@ -21,36 +21,45 @@ final class Genius extends BaseProvider
                 if ($response->is(\aportela\HTTPRequestWrapper\ContentType::JSON)) {
                     $json = json_decode($response->body);
                     if ($json !== null && json_last_error() === JSON_ERROR_NONE) {
-                        if ($json->meta && $json->meta->status == 200) {
-                            if ($json->response && $json->response->sections && is_array($json->response->sections)) {
-                                if ($json->response->sections[0]->hits && is_array($json->response->sections[0]->hits)) {
+                        if (isset($json->meta) && isset($json->meta->status) && $json->meta->status == 200) {
+                            if (isset($json->response) && isset($json->response->sections) && is_array($json->response->sections)) {
+                                if (isset($json->response->sections[0]->hits) && is_array($json->response->sections[0]->hits)) {
                                     foreach ($json->response->sections[0]->hits as $hit) {
-                                        if ($hit->type == "song" && $hit->result && $hit->result->url && filter_var($hit->result->url, FILTER_VALIDATE_URL)) {
+                                        if (isset($hit->type) && $hit->type == "song" && isset($hit->result) && isset($hit->result->url) && is_string($hit->result->url) && filter_var($hit->result->url, FILTER_VALIDATE_URL)) {
                                             return ($hit->result->url);
                                         }
                                     }
+                                    // TODO: logger
                                     throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
                                 } else {
-                                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("Response sections hits array not found"));
+                                    // TODO: logger
+                                    throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Response sections hits array not found");
                                 }
                             } else {
-                                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("Response sections array not found"));
+                                // TODO: logger
+                                throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Response sections array not found");
                             }
                         } else {
+                            // TODO: logger
                             throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse(sprintf("Meta status != 200 (%d)", $json->meta->status));
                         }
                     } else {
+                        // TODO: logger
                         throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Invalid JSON body");
                     }
                 } else {
+                    // TODO: logger
                     throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP content type: " . $response->getContentType());
                 }
             } else {
+                // TODO: logger
                 throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
             }
         } elseif ($response->code == 403) {
+            // TODO: logger
             throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code . " (cloudflare protecction ?)");
         } else {
+            // TODO: logger
             throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
         }
     }
@@ -78,7 +87,7 @@ final class Genius extends BaseProvider
                         if ($nodes->count() > 0) {
                             $data = null;
                             foreach ($nodes as $key => $node) {
-                                $data .= trim($node->textContent) . PHP_EOL;
+                                $data .= mb_trim($node->textContent) . PHP_EOL;
                             }
                             if (!empty($data)) {
                                 return ($data);
