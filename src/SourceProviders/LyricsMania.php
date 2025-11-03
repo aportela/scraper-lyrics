@@ -49,7 +49,7 @@ final class LyricsMania extends BaseProvider
                         if ($nodes->count() > 0) {
                             $data = null;
                             foreach ($nodes as $key => $node) {
-                                $data .= trim($node->textContent) . PHP_EOL;
+                                $data .= mb_trim($node->textContent) . PHP_EOL;
                             }
                             if (!empty($data)) {
                                 return ($data);

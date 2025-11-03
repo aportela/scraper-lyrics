@@ -22,13 +22,17 @@ final class SearchEngineDuckDuckGo extends BaseProvider
                 if (preg_match($pattern, $response->body, $match)) {
                     $data = null;
                     foreach (explode(PHP_EOL, str_ireplace(array("<br>", "<br/>", "<br />"), PHP_EOL, $match[1])) as $line) {
-                        $data .= trim($line) . PHP_EOL;
+                        $data .= mb_trim($line) . PHP_EOL;
                     };
                     if (!empty($data)) {
                         $data = preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {
                             return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
                         }, $data);
-                        return ($data);
+                        if (! empty($data)) {
+                            return ($data);
+                        } else {
+                            throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
+                        }
                     } else {
                         throw new \aportela\ScraperLyrics\Exception\NotFoundException("");
                     }
