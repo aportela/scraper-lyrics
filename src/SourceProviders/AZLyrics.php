@@ -83,7 +83,7 @@ final class AZLyrics extends BaseProvider
                     $nodes = $xpath->query('//div[@class="col-xs-12 col-lg-8 text-center"]/div');
                     if ($nodes != false) {
                         if ($nodes->count() == 6) {
-                            $data = trim($nodes[4]->textContent);
+                            $data = mb_trim($nodes[4]->textContent);
                             if (!empty($data)) {
                                 return ($data);
                             } else {
