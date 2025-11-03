@@ -6,7 +6,7 @@ final class LyricsMania extends BaseProvider
 {
     public function __construct(\Psr\Log\LoggerInterface $logger)
     {
-        parent::__construct($logger, "");
+        parent::__construct($logger, null);
     }
 
     private function getLink(string $title, string $artist): string

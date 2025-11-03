@@ -6,7 +6,7 @@ final class SearchEngineDuckDuckGo extends BaseProvider
 {
     public function __construct(\Psr\Log\LoggerInterface $logger)
     {
-        parent::__construct($logger, "");
+        parent::__construct($logger, null);
     }
 
     public function scrap(string $title, string $artist): string
