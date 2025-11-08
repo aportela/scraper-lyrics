@@ -32,9 +32,13 @@ final class Musicmatch extends BaseProvider
                     if ($nodes !== false && $nodes->count() > 0) {
                         $data = null;
                         foreach ($nodes as $key => $node) {
-                            $data .= mb_trim($node->textContent) . PHP_EOL;
+                            if (isset($node->textContent) && is_string($node->textContent)) {
+                                $data .= mb_trim($node->textContent) . PHP_EOL;
+                            }
                         }
-                        $data = mb_trim($data);
+                        if (is_string($data)) {
+                            $data = mb_trim($data);
+                        }
                         if (!empty($data)) {
                             return ($data);
                         } else {
