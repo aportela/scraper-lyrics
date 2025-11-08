@@ -21,11 +21,11 @@ final class Genius extends BaseProvider
                 if ($response->is(\aportela\HTTPRequestWrapper\ContentType::JSON)) {
                     $json = json_decode($response->body);
                     if ($json !== null && json_last_error() === JSON_ERROR_NONE) {
-                        if (isset($json->meta) && isset($json->meta->status) && $json->meta->status == 200) {
-                            if (isset($json->response) && isset($json->response->sections) && is_array($json->response->sections)) {
-                                if (isset($json->response->sections[0]->hits) && is_array($json->response->sections[0]->hits)) {
+                        if (is_object($json) && isset($json->meta) && is_object($json->meta) && isset($json->meta->status) && $json->meta->status == 200) {
+                            if (isset($json->response) && is_object($json->response) && isset($json->response->sections) && is_array($json->response->sections) && count($json->response->sections) > 0) {
+                                if (is_object($json->response->sections[0]) && isset($json->response->sections[0]->hits) && is_array($json->response->sections[0]->hits)) {
                                     foreach ($json->response->sections[0]->hits as $hit) {
-                                        if (isset($hit->type) && $hit->type == "song" && isset($hit->result) && isset($hit->result->url) && is_string($hit->result->url) && filter_var($hit->result->url, FILTER_VALIDATE_URL)) {
+                                        if (is_object($hit) && isset($hit->type) && $hit->type == "song" && isset($hit->result) && is_object($hit->result) && isset($hit->result->url) && is_string($hit->result->url) && filter_var($hit->result->url, FILTER_VALIDATE_URL)) {
                                             return ($hit->result->url);
                                         }
                                     }
@@ -88,9 +88,13 @@ final class Genius extends BaseProvider
                          */
                         $data = null;
                         foreach ($nodes as $key => $node) {
-                            $data .= mb_trim($node->textContent) . PHP_EOL;
+                            if (isset($node->textContent) && is_string($node->textContent)) {
+                                $data .= mb_trim($node->textContent) . PHP_EOL;
+                            }
                         }
-                        $data = mb_trim($data);
+                        if (is_string($data)) {
+                            $data = mb_trim($data);
+                        }
                         if (!empty($data)) {
                             return ($data);
                         } else {
