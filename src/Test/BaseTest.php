@@ -20,7 +20,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     public static function setUpBeforeClass(): void
     {
         self::$logger = new \Psr\Log\NullLogger();
-        self::$cache = new \aportela\SimpleFSCache\Cache(self::$logger, \aportela\SimpleFSCache\CacheFormat::TXT, dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . "cache", false);
+        self::$cache = new \aportela\SimpleFSCache\Cache(self::$logger, dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . "cache", null, \aportela\SimpleFSCache\CacheFormat::TXT);
         self::$lyrics = new \aportela\ScraperLyrics\Lyrics(self::$logger, self::$cache);
     }
 

@@ -11,8 +11,8 @@ class Lyrics
     // (AT THIS TIME) this is REQUIRED/IMPORTANT, with another user agents (on GOOGLE) the search response is not the same (do not include lyrics!)
     public const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/116.0.1938.81";
 
-    private ?string $title;
-    private ?string $artist;
+    private string $title;
+    private string $artist;
     private ?string $lyrics;
     private ?string $source;
 
@@ -24,9 +24,7 @@ class Lyrics
         $this->cache = $cache;
     }
 
-    public function __destruct()
-    {
-    }
+    public function __destruct() {}
 
     public function getTitle(): ?string
     {
@@ -68,7 +66,7 @@ class Lyrics
     private function saveCache(string $hash, string $raw): bool
     {
         if ($this->cache !== null) {
-            return ($this->cache->save($hash, $raw));
+            return ($this->cache->set($hash, $raw));
         } else {
             return (false);
         }
@@ -78,7 +76,7 @@ class Lyrics
     {
         $this->lyrics = null;
         if ($this->cache !== null) {
-            $cacheData = $this->cache->get($hash);
+            $cacheData = $this->cache->get($hash, false);
             if (is_string($cacheData)) {
                 $this->lyrics = $cacheData;
                 return (true);
