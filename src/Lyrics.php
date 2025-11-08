@@ -180,7 +180,6 @@ class Lyrics
             $this->logger->error("\aportela\ScraperLyrics\Lyrics::scrapFromSourceProvider - Error: invalid artist: {$artist}");
             throw new \InvalidArgumentException("title");
         }
-        return (false);
     }
 
     /**
