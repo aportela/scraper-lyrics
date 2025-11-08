@@ -56,7 +56,7 @@ final class AZLyrics extends BaseProvider
                     $xpath = new \DOMXPath($doc);
                     $expression = '//table/tr/td/a';
                     $nodes = $xpath->query($expression);
-                    if ($nodes !== false && $nodes->count() > 0) {
+                    if ($nodes !== false && $nodes->count() > 0 && is_object($nodes[0]) && is_string($nodes[0]->getAttribute("href"))) {
                         return ($nodes[0]->getAttribute("href"));
                     } else {
                         $this->logger->error("\aportela\ScraperLyrics\SourceProviders\AZLyrics::getLink - Error: missing html xpath nodes", [$expression]);
@@ -88,7 +88,7 @@ final class AZLyrics extends BaseProvider
                     $xpath = new \DOMXPath($doc);
                     $expression = '//div[@class="col-xs-12 col-lg-8 text-center"]/div';
                     $nodes = $xpath->query($expression);
-                    if ($nodes !== false && $nodes->count() == 6) {
+                    if ($nodes !== false && $nodes->count() == 6 && is_object($nodes[4]) && isset($nodes[4]->textContent) && is_string($nodes[4]->textContent)) {
                         $data = mb_trim($nodes[4]->textContent);
                         if (!empty($data)) {
                             return ($data);
