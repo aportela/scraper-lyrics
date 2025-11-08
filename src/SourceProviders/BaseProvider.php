@@ -7,6 +7,9 @@ abstract class BaseProvider implements ISourceProvider
     protected \Psr\Log\LoggerInterface $logger;
     protected \aportela\HTTPRequestWrapper\HTTPRequest $http;
 
+    /**
+     * @param array<string> $requiredExtensions
+     */
     public function __construct(\Psr\Log\LoggerInterface $logger, ?string $customUserAgent = null, array $requiredExtensions = ["dom", "libxml", "SimpleXML"])
     {
         $this->logger = $logger;
@@ -22,9 +25,7 @@ abstract class BaseProvider implements ISourceProvider
 
     abstract public function scrap(string $title, string $artist): string;
 
-    public function __destruct()
-    {
-    }
+    public function __destruct() {}
 
     public function parseHTMLCRLF(string $html): string
     {
@@ -66,6 +67,6 @@ abstract class BaseProvider implements ISourceProvider
                 $html
             );
         }
-        return ($data);
+        return (strval($data));
     }
 }
