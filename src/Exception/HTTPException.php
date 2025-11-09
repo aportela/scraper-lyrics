@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace aportela\ScraperLyrics\Exception;
 
 class HTTPException extends \Exception

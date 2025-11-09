@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace aportela\ScraperLyrics\SourceProviders;
 
 final class SearchEngineDuckDuckGo extends BaseProvider
 {
     public function __construct(\Psr\Log\LoggerInterface $logger)
     {
-        parent::__construct($logger, null);
+        parent::__construct($logger);
     }
 
     public function scrap(string $title, string $artist): string
@@ -15,19 +17,20 @@ final class SearchEngineDuckDuckGo extends BaseProvider
         $this->http->HEAD("https://duckduckgo.com/");
         // set referer from root search domain
         $this->http->setReferer("https://duckduckgo.com/");
-        $response = $this->http->GET("https://duckduckgo.com/a.js", ["s" => "lyrics", "from" => "lyrics", "ta" => $artist, "tl" => $title]);
-        if ($response->code == 200) {
-            if (!empty($response->body)) {
+
+        $httpResponse = $this->http->GET("https://duckduckgo.com/a.js", ["s" => "lyrics", "from" => "lyrics", "ta" => $artist, "tl" => $title]);
+        if ($httpResponse->code === 200) {
+            if (!in_array($httpResponse->body, [null, '', '0'], true)) {
                 $pattern = '/DDG.duckbar.add_array\(\[\{"data":\[\{"Abstract":"(.*)","AbstractSource":"Musixmatch"/';
-                if (preg_match($pattern, $response->body, $match)) {
-                    if (! empty($match[1])) {
+                if (preg_match($pattern, $httpResponse->body, $match)) {
+                    if ($match[1] !== '' && $match[1] !== '0') {
                         $data = $this->parseHTMLCRLF($match[1]);
                         $data = $this->parseHTMLUnicode($data);
                         $data = mb_trim($data);
-                        if (!empty($data)) {
+                        if ($data !== '' && $data !== '0') {
                             return ($data);
                         } else {
-                            $this->logger->error("\aportela\ScraperLyrics\SourceProviders\SearchEngineDuckDuckGo::scrap - Error: empty lyrics");
+                            $this->logger->error(\aportela\ScraperLyrics\SourceProviders\SearchEngineDuckDuckGo::class . '::scrap - Error: empty lyrics');
                             throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse("Empty lyrics");
                         }
                     } else {
@@ -40,7 +43,7 @@ final class SearchEngineDuckDuckGo extends BaseProvider
                 throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP (empty) body");
             }
         } else {
-            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $response->code);
+            throw new \aportela\ScraperLyrics\Exception\HTTPException("Invalid HTTP response code: " . $httpResponse->code);
         }
     }
 }

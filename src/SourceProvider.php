@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace aportela\ScraperLyrics;
 
 enum SourceProvider: string
