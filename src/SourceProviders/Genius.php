@@ -87,7 +87,7 @@ final class Genius extends BaseProvider
                          * [textContent] => 502 ContributorsTranslationsDeutschTürkçeไทย (Thai)EspañolPortuguêsفارسیFrançaisPolskiРусский (Russian)ČeskyBohemian Rhapsody LyricsWidely considered to be one of the greatest songs of all time, “Bohemian Rhapsody” was the first single released from Queen’s fourth studio album, A Night at the Opera. It became an international success… Read More [Intro]
                          */
                         $data = null;
-                        foreach ($nodes as $key => $node) {
+                        foreach ($nodes as $node) {
                             if (isset($node->textContent) && is_string($node->textContent)) {
                                 $data .= mb_trim($node->textContent) . PHP_EOL;
                             }

@@ -31,7 +31,7 @@ final class Musicmatch extends BaseProvider
                     $nodes = $xpath->query($expression);
                     if ($nodes !== false && $nodes->count() > 0) {
                         $data = null;
-                        foreach ($nodes as $key => $node) {
+                        foreach ($nodes as $node) {
                             if (isset($node->textContent) && is_string($node->textContent)) {
                                 $data .= mb_trim($node->textContent) . PHP_EOL;
                             }

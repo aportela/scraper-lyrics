@@ -53,7 +53,7 @@ final class LyricsMania extends BaseProvider
                     $nodes = $xpath->query($expression);
                     if ($nodes !== false && $nodes->count() > 0) {
                         $data = null;
-                        foreach ($nodes as $key => $node) {
+                        foreach ($nodes as $node) {
                             if ($node instanceof \DOMElement) {
                                 $data .= mb_trim($node->textContent) . PHP_EOL;
                             }
