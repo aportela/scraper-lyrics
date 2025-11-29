@@ -19,9 +19,7 @@ class Lyrics
 
     private ?string $source = null;
 
-    public function __construct(protected \Psr\Log\LoggerInterface $logger, protected ?\aportela\SimpleFSCache\Cache $cache = null)
-    {
-    }
+    public function __construct(protected \Psr\Log\LoggerInterface $logger, protected ?\aportela\SimpleFSCache\Cache $cache = null) {}
 
     public function getTitle(): ?string
     {
@@ -190,14 +188,14 @@ class Lyrics
      */
     public function scrap(string $title, string $artist, ?array $providers = []): bool
     {
-        return array_any((isset($providers) && $providers !== []) ?
-            $providers :
-            [
+        return array_any((isset($providers) && $providers !== [])
+            ? $providers
+            : [
                 \aportela\ScraperLyrics\SourceProvider::SEARCH_ENGINE_DUCKDUCKGO,
                 \aportela\ScraperLyrics\SourceProvider::MUSIXMATCH,
                 \aportela\ScraperLyrics\SourceProvider::LYRICS_MANIA,
                 \aportela\ScraperLyrics\SourceProvider::GENIUS,
                 \aportela\ScraperLyrics\SourceProvider::AZLYRICS,
-            ], fn (\aportela\ScraperLyrics\SourceProvider $sourceProvider): bool => $this->scrapFromSourceProvider($title, $artist, $sourceProvider));
+            ], fn(\aportela\ScraperLyrics\SourceProvider $sourceProvider): bool => $this->scrapFromSourceProvider($title, $artist, $sourceProvider));
     }
 }

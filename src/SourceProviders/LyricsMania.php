@@ -23,7 +23,7 @@ final class LyricsMania extends BaseProvider
                     $expression = '//ul[@class="search"]/li/a';
                     $nodes = $domxPath->query($expression);
                     if ($nodes != false && $nodes->count() > 0 && $nodes[0] instanceof \DOMElement) {
-                        return ("https://www.lyricsmania.com" .  $nodes[0]->getAttribute('href'));
+                        return ("https://www.lyricsmania.com" . $nodes[0]->getAttribute('href'));
                     } else {
                         $this->logger->error(\aportela\ScraperLyrics\SourceProviders\LyricsMania::class . '::getLink - Error: missing html xpath nodes', [$expression]);
                         throw new \aportela\ScraperLyrics\Exception\InvalidSourceProviderAPIResponse('Missing html xpath nodes: ' . $expression);
